@@ -10,6 +10,7 @@ public class Trainee extends User {
 
     public Trainee(int traineeID, String firstName, String lastName, String username, String password, boolean isActive, LocalDate dateOfBirth, String address) {
         super(firstName, lastName, username, password, isActive);
+        this.traineeID = traineeID;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
     }
@@ -36,6 +37,11 @@ public class Trainee extends User {
 
     public void setTraineeID(int traineeID) {
         this.traineeID = traineeID;
+    }
+
+    @Override
+    public String toString() {
+        return "Trainee [traineeID=" + traineeID + ", user=" + super.toString() + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
     }
 
 }

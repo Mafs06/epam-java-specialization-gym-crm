@@ -56,4 +56,9 @@ public abstract class User {
         this.isActive = isActive;
     }
 
+    @Override
+    public String toString() {
+        return "User [firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", password=" + password + ", isActive=" + isActive + "]";
+    }
+
 }

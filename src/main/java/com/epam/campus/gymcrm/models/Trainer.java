@@ -26,5 +26,10 @@ public class Trainer extends User {
     public void setTrainerID(int trainerID) {
         this.trainerID = trainerID;
     }
+
+    @Override
+    public String toString() {
+        return "Trainer [trainerID=" + trainerID + ", user=" + super.toString() + "specialization=" + specialization + "]";
+    }
     
 }

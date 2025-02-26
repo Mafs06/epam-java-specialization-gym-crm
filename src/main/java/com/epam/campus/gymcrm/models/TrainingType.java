@@ -16,4 +16,9 @@ public class TrainingType {
         this.trainingTypeName = trainingTypeName;
     }
 
+    @Override
+    public String toString() {
+        return "TrainingType [trainingTypeName=" + trainingTypeName + "]";
+    }
+
 }

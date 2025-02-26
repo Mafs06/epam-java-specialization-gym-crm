@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.epam.campus.gymcrm.models.Trainer;
 
+@Repository
 public class TrainerDao implements Dao<Trainer>{
 
     private List<Trainer> trainers = new ArrayList<>();
@@ -17,7 +20,9 @@ public class TrainerDao implements Dao<Trainer>{
 
     @Override
     public Optional<Trainer> get(int id) {
-        return Optional.ofNullable(trainers.get(id));
+        return trainers.stream()
+            .filter(trainer -> trainer.getTrainerID() == id)
+            .findFirst();
     }
 
     @Override
@@ -32,6 +37,8 @@ public class TrainerDao implements Dao<Trainer>{
 
     @Override
     public void update(Trainer trainer, String[] params) {
+        trainers.removeIf(t -> t.getTrainerID() == trainer.getTrainerID());
+
         trainer.setTrainerID(Integer.parseInt(params[0]));
         trainer.setFirstName(params[1]);
         trainer.setLastName(params[2]);

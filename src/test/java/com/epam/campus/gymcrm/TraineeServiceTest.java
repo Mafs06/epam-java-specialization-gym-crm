@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class TraineeServiceTest {
 
     @Test
     public void testGetTrainee() {
-        Trainee trainee = new Trainee(1, "John", "Doe", "johndoe", "pass123", true, null, "123 Street");
+        Trainee trainee = new Trainee(1, "John", "Doe", true, LocalDate.of(2025, 03, 01), "123 Street");
         when(traineeDao.get(1)).thenReturn(Optional.of(trainee));
 
         Optional<Trainee> result = traineeService.getTrainee(1);
@@ -43,8 +44,8 @@ public class TraineeServiceTest {
 
     @Test
     public void testGetTrainees() {
-        Trainee trainee1 = new Trainee(1, "John", "Doe", "johndoe", "pass123", true, null, "123 Street");
-        Trainee trainee2 = new Trainee(2, "Jane", "Doe", "janedoe", "pass123", true, null, "456 Avenue");
+        Trainee trainee1 = new Trainee(1, "John", "Doe", true, LocalDate.of(2025, 03, 01), "123 Street");
+        Trainee trainee2 = new Trainee(2, "Jane", "Doe", true, LocalDate.of(2025, 04, 02), "456 Avenue");
         when(traineeDao.getAll()).thenReturn(Arrays.asList(trainee1, trainee2));
 
         List<Trainee> result = traineeService.getTrainees();
@@ -55,7 +56,7 @@ public class TraineeServiceTest {
 
     @Test
     public void testCreateTrainee() {
-        Trainee trainee = new Trainee(1, "John", "Doe", "johndoe", "pass123", true, null, "123 Street");
+        Trainee trainee = new Trainee(1, "John", "Doe", true, LocalDate.of(2025, 03, 01), "123 Street");
 
         traineeService.createTrainee(trainee);
 
@@ -64,7 +65,7 @@ public class TraineeServiceTest {
 
     @Test
     public void testUpdateTrainee() {
-        Trainee trainee = new Trainee(1, "John", "Doe", "johndoe", "pass123", true, null, "123 Street");
+        Trainee trainee = new Trainee(1, "John", "Doe", true, LocalDate.of(2025, 03, 01), "123 Street");
         String[] params = {"1", "John", "Smith", "johnsmith", "newpass", "true", "789 Road"};
 
         traineeService.updateTrainee(trainee, params);
@@ -74,7 +75,7 @@ public class TraineeServiceTest {
 
     @Test
     public void testDeleteTrainee() {
-        Trainee trainee = new Trainee(1, "John", "Doe", "johndoe", "pass123", true, null, "123 Street");
+        Trainee trainee = new Trainee(1, "John", "Doe", true, LocalDate.of(2025, 03, 01), "123 Street");
 
         traineeService.deleteTrainee(trainee);
 

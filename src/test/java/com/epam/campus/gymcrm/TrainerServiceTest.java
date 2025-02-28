@@ -30,7 +30,7 @@ public class TrainerServiceTest {
 
     @Test
     public void testCreateTrainer() {
-        Trainer trainer = new Trainer(1, "John", "Doe", "johndoe", "pass123", true, "Fitness");
+        Trainer trainer = new Trainer(1, "John", "Doe", true, "Fitness");
         trainerService.createTrainer(trainer);
 
         verify(trainerDao, times(1)).save(trainer);
@@ -38,7 +38,7 @@ public class TrainerServiceTest {
 
     @Test
     public void testGetTrainer() {
-        Trainer trainer = new Trainer(1, "John", "Doe", "johndoe", "pass123", true, "Fitness");
+        Trainer trainer = new Trainer(1, "John", "Doe", true, "Fitness");
         when(trainerDao.get(1)).thenReturn(Optional.of(trainer));
 
         Optional<Trainer> result = trainerService.getTrainer(1);
@@ -50,8 +50,8 @@ public class TrainerServiceTest {
     @Test
     public void testGetAllTrainers() {
         List<Trainer> trainers = List.of(
-            new Trainer(1, "John", "Doe", "johndoe", "pass123", true, "Fitness"),
-            new Trainer(2, "Jane", "Doe", "janedoe", "pass456", true, "Yoga")
+            new Trainer(1, "John", "Doe", true, "Fitness"),
+            new Trainer(2, "Jane", "Doe", true, "Yoga")
         );
         when(trainerDao.getAll()).thenReturn(trainers);
 
@@ -62,7 +62,7 @@ public class TrainerServiceTest {
 
     @Test
     public void testUpdateTrainer() {
-        Trainer trainer = new Trainer(1, "John", "Doe", "johndoe", "pass123", true, "Fitness");
+        Trainer trainer = new Trainer(1, "John", "Doe", true, "Fitness");
         String[] params = {"1", "Johnny", "Doe", "johnnydoe", "newpass", "true", "Cardio"};
 
         trainerService.updateTrainer(trainer, params);
@@ -72,7 +72,7 @@ public class TrainerServiceTest {
 
     @Test
     public void testDeleteTrainer() {
-        Trainer trainer = new Trainer(1, "John", "Doe", "johndoe", "pass123", true, "Fitness");
+        Trainer trainer = new Trainer(1, "John", "Doe", true, "Fitness");
 
         trainerService.deleteTrainer(trainer);
 

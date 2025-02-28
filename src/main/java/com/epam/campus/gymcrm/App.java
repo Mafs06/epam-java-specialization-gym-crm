@@ -18,10 +18,10 @@ public class App {
         ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
         GymFacade gymFacade = context.getBean(GymFacade.class);
 
-        Trainee newTrainee = new Trainee(100, "Carlos", "Lopez", "carlos.lopez", "securePass123", true, LocalDate.of(1995, 5, 20), "123 Main Street");
+        Trainee newTrainee = new Trainee(100, "Carlos", "Lopez", true, LocalDate.of(1995, 5, 20), "123 Main Street");
         gymFacade.createTrainee(newTrainee);
 
-        Trainer newTrainer = new Trainer(110, "Jane", "Doe", "janedoe", "password123", true, "Yoga");
+        Trainer newTrainer = new Trainer(110, "Jane", "Doe", true, "Yoga");
         gymFacade.createTrainer(newTrainer);
 
         Training newTraining = new Training(120, 100, 110, "Strength Training", new TrainingType("Strength Training"), LocalDate.of(2025, 3, 15), 60);
@@ -30,6 +30,11 @@ public class App {
         System.out.println(gymFacade.getAllTrainees());
         System.out.println(gymFacade.getAllTrainers());
         System.out.println(gymFacade.getAllTrainings());
+
+        System.out.println(gymFacade.getTrainee(3));
+        System.out.println(gymFacade.getTrainee(4));
+
+        System.out.println(gymFacade.getTrainer(3));
 
         ((AnnotationConfigApplicationContext) context).close();
     }

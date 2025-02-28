@@ -1,13 +1,16 @@
 package com.epam.campus.gymcrm.servises;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.epam.campus.gymcrm.daos.TraineeDao;
 import com.epam.campus.gymcrm.models.Trainee;
+import com.epam.campus.gymcrm.models.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class TraineeService {
 
     private static final Logger logger = LoggerFactory.getLogger(TraineeService.class);
-    
+
     private TraineeDao traineeDao;
 
     @Autowired
@@ -35,8 +38,15 @@ public class TraineeService {
     }
 
     public void createTrainee(Trainee trainee) {
+        List<User> existingUsers = traineeDao.getAll().stream()
+            .map(t -> (User) t)
+            .collect(Collectors.toList());
+
+        trainee.generateUsername(existingUsers);
+        trainee.generatePassword();
+
         traineeDao.save(trainee);
-        logger.info("Trainee created: {}", trainee);
+        logger.info("Trainee created: {} with username: {} and password: {}", trainee, trainee.getUsername(), trainee.getPassword());
     }
 
     public void updateTrainee(Trainee trainee, String[] params) {
@@ -49,3 +59,4 @@ public class TraineeService {
         logger.info("Trainee deleted: {}", trainee);
     }
 }
+

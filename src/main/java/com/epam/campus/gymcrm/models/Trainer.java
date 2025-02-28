@@ -9,10 +9,18 @@ public class Trainer extends User {
         super();
     }
 
-    public Trainer(int trainerID, String firstName, String lastName, String username, String password, boolean active, String specialization) {
-        super(firstName, lastName, username, password, active);
+    public Trainer(int trainerID, String firstName, String lastName, boolean active, String specialization) {
+        super(firstName, lastName, null, null, active);
         this.specialization = specialization;
         this.trainerID = trainerID;
+    }
+
+    public void setUsername(String username) {
+        super.setUsername(username);
+    }
+
+    public void setPassword(String password) {
+        super.setPassword(password);
     }
 
     public String getSpecialization() {

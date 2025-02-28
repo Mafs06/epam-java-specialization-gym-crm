@@ -14,11 +14,19 @@ public class Trainee extends User {
         super();
     }
 
-    public Trainee(int traineeID, String firstName, String lastName, String username, String password, boolean active, LocalDate dateOfBirth, String address) {
-        super(firstName, lastName, username, password, active);
+    public Trainee(int traineeID, String firstName, String lastName, boolean active, LocalDate dateOfBirth, String address) {
+        super(firstName, lastName, null, null, active);
         this.traineeID = traineeID;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
+    }
+
+    public void setUsername(String username) {
+        super.setUsername(username);
+    }
+
+    public void setPassword(String password) {
+        super.setPassword(password);
     }
 
     public LocalDate getDateOfBirth() {

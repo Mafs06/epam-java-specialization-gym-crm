@@ -52,10 +52,8 @@ public class TrainerDao implements Dao<Trainer>{
         trainer.setTrainerID(Integer.parseInt(params[0]));
         trainer.setFirstName(params[1]);
         trainer.setLastName(params[2]);
-        trainer.setUsername(params[3]);
-        trainer.setPassword(params[4]);
-        trainer.setActive(Boolean.parseBoolean(params[5]));
-        trainer.setSpecialization(params[6]);
+        trainer.setActive(Boolean.parseBoolean(params[3]));
+        trainer.setSpecialization(params[4]);
         save(trainer);
     }
 

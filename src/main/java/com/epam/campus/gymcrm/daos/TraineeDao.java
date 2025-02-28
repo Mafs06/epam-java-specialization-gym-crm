@@ -16,7 +16,7 @@ import com.epam.campus.gymcrm.storage.Storage;
 public class TraineeDao implements Dao<Trainee>{
 
     private Storage storage;
-    private final String ENTITY_KEY = "Trainer";
+    private final String ENTITY_KEY = "Trainee";
 
     @Autowired
     public void setStorage(Storage storage) {
@@ -53,11 +53,9 @@ public class TraineeDao implements Dao<Trainee>{
         trainee.setTraineeID(Integer.parseInt(params[0]));
         trainee.setFirstName(params[1]);
         trainee.setLastName(params[2]);
-        trainee.setUsername(params[3]);
-        trainee.setPassword(params[4]);
-        trainee.setActive(Boolean.parseBoolean(params[5]));
-        trainee.setDateOfBirth(LocalDate.parse(params[6]));  
-        trainee.setAddress(params[7]);  
+        trainee.setActive(Boolean.parseBoolean(params[3]));
+        trainee.setDateOfBirth(LocalDate.parse(params[4]));  
+        trainee.setAddress(params[5]);  
         save(trainee);
     }
 

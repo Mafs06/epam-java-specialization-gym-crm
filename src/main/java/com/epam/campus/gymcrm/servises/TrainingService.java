@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.epam.campus.gymcrm.daos.TrainingDao;
 import com.epam.campus.gymcrm.models.Training;
 
-
-
 @Service
 public class TrainingService {
 

@@ -9,8 +9,13 @@ import org.springframework.stereotype.Service;
 import com.epam.campus.gymcrm.daos.TrainingDao;
 import com.epam.campus.gymcrm.models.Training;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class TrainingService {
+
+    private static final Logger logger = LoggerFactory.getLogger(TrainingService.class);
 
     private TrainingDao trainingDao;
 
@@ -20,25 +25,27 @@ public class TrainingService {
     }
 
     public Optional<Training> getTraining(int id) {
+        logger.info("Fetching training with ID: {}", id);
         return trainingDao.get(id);
     }
 
     public List<Training> getTrainings() {
+        logger.info("Fetching all trainings");
         return trainingDao.getAll();
     }
 
     public void createTraining(Training training) {
         trainingDao.save(training);
-        System.out.println("Training created: " + training.toString());
+        logger.info("Training created: {}", training);
     }
 
     public void updateTraining(Training training, String[] params) {
         trainingDao.update(training, params);
-        System.out.println("Training updated: " + training.toString());
+        logger.info("Training updated: {}", training);
     }
 
     public void deleteTraining(Training training) {
         trainingDao.delete(training);
-        System.out.println("Training deleted: " + training.toString());
+        logger.info("Training deleted: {}", training);
     }
 }

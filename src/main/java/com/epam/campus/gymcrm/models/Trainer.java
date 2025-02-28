@@ -5,8 +5,12 @@ public class Trainer extends User {
     private String specialization;
     private int trainerID;
 
-    public Trainer(int trainerID, String firstName, String lastName, String username, String password, boolean isActive, String specialization) {
-        super(firstName, lastName, username, password, isActive);
+    public Trainer() {
+        super();
+    }
+
+    public Trainer(int trainerID, String firstName, String lastName, String username, String password, boolean active, String specialization) {
+        super(firstName, lastName, username, password, active);
         this.specialization = specialization;
         this.trainerID = trainerID;
     }
@@ -29,7 +33,7 @@ public class Trainer extends User {
 
     @Override
     public String toString() {
-        return "Trainer [trainerID=" + trainerID + ", user=" + super.toString() + "specialization=" + specialization + "]";
+        return "Trainer [trainerID=" + trainerID + ", user=" + super.toString() + " specialization=" + specialization + "]";
     }
     
 }

@@ -29,16 +29,16 @@ public class TraineeService {
 
     public void createTrainee(Trainee trainee) {
         traineeDao.save(trainee);
-        System.out.println("Trainee created!");
+        System.out.println("Trainee created: " + trainee.toString());
     }
 
     public void updateTrainee(Trainee trainee, String[] params) {
         traineeDao.update(trainee, params);
-        System.out.println("Trainee updated!");
+        System.out.println("Trainee updated: " + trainee.toString());
     }
 
     public void deleteTrainee(Trainee trainee) {
         traineeDao.delete(trainee);
-        System.out.println("Trainee deleted!");
+        System.out.println("Trainee deleted: " + trainee.toString());
     }
 }

@@ -6,14 +6,16 @@ public abstract class User {
     private String lastName;
     private String username;
     private String password;
-    private boolean isActive;
+    private boolean active;
 
-    public User(String firstName, String lastName, String username, String password, boolean isActive) {
+    public User() {}
+
+    public User(String firstName, String lastName, String username, String password, boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
-        this.isActive = isActive;
+        this.active = active;
     }
 
     public String getFirstName() {
@@ -49,16 +51,16 @@ public abstract class User {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
     public String toString() {
-        return "User [firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", password=" + password + ", isActive=" + isActive + "]";
+        return "User [firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", password=" + password + ", isActive=" + active + "]";
     }
 
 }

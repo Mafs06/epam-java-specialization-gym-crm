@@ -1,47 +1,56 @@
 package com.epam.campus.gymcrm.daos;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.epam.campus.gymcrm.models.Training;
 import com.epam.campus.gymcrm.models.TrainingType;
+import com.epam.campus.gymcrm.storage.Storage;
 
 @Repository
 public class TrainingDao implements Dao<Training>{
 
-    private List<Training> trainings = new ArrayList<>();
+    private final Storage storage;
+    private final String ENTITY_KEY = "Training";
 
-    public TrainingDao(List<Training> trainings) {
-        trainings.add(new Training(1, 1, 1, "Agility 101", new TrainingType("Agility"), LocalDate.of(2025, Month.MARCH, 1), 10));
-        trainings.add(new Training(2, 2, 2, "Basics of Self Defense", new TrainingType("Self Defense"), LocalDate.of(2025, Month.FEBRUARY, 28), 15));
+    @Autowired
+    public TrainingDao(Storage storage) {
+        this.storage = storage;
     }
 
     @Override
     public Optional<Training> get(int id) {
-        return trainings.stream()
-            .filter(training -> training.getTrainerID() == id)
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Training)
+            .map(obj -> (Training) obj)
+            .filter(training -> training.getTrainingID() == id)
             .findFirst();
     }
 
     @Override
     public List<Training> getAll() {
-        return trainings;
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Training)
+            .map(obj -> (Training) obj)
+            .collect(Collectors.toList());
     }
 
     @Override
     public void save(Training training) {
-        trainings.add(training);
+        storage.addData(ENTITY_KEY, training);
     }
 
     @Override
     public void update(Training training, String[] params) {
-        trainings.removeIf(t -> t.getTrainingID() == training.getTrainingID());
-
+        delete(training);
         training.setTrainingID(Integer.parseInt(params[0]));
         training.setTraineeID(Integer.parseInt(params[1]));
         training.setTrainerID(Integer.parseInt(params[2]));
@@ -49,13 +58,13 @@ public class TrainingDao implements Dao<Training>{
         training.setTrainingType(new TrainingType(params[3]));
         training.setTrainingDate(LocalDate.parse(params[4]));
         training.setTrainingDuration(Integer.parseInt(params[5]));
-
-        trainings.add(training);
+        save(training);
     }
 
     @Override
     public void delete(Training training) {
-        trainings.remove(training);
+        storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .removeIf(obj -> obj instanceof Training && ((Training) obj).getTrainingID() == training.getTrainingID());
     }
 
 }

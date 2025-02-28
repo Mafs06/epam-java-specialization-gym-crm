@@ -8,8 +8,14 @@ public class Trainee extends User {
     private String address;
     private int traineeID;
 
-    public Trainee(int traineeID, String firstName, String lastName, String username, String password, boolean isActive, LocalDate dateOfBirth, String address) {
-        super(firstName, lastName, username, password, isActive);
+    
+
+    public Trainee() {
+        super();
+    }
+
+    public Trainee(int traineeID, String firstName, String lastName, String username, String password, boolean active, LocalDate dateOfBirth, String address) {
+        super(firstName, lastName, username, password, active);
         this.traineeID = traineeID;
         this.dateOfBirth = dateOfBirth;
         this.address = address;

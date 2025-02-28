@@ -29,16 +29,16 @@ public class TrainerService {
 
     public void createTrainer(Trainer trainer) {
         trainerDao.save(trainer);
-        System.out.println("Trainer created!");
+        System.out.println("Trainer created: " + trainer.toString());
     }
 
     public void updateTrainer(Trainer trainer, String[] params) {
         trainerDao.update(trainer, params);
-        System.out.println("Trainer updated!");
+        System.out.println("Trainer updated: " + trainer.toString());
     }
 
     public void deleteTrainer(Trainer trainer) {
         trainerDao.delete(trainer);
-        System.out.println("Trainer deleted!");
+        System.out.println("Trainer deleted!: " + trainer.toString());
     }
 }

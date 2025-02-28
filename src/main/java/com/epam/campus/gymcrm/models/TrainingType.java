@@ -2,23 +2,27 @@ package com.epam.campus.gymcrm.models;
 
 public class TrainingType {
 
-    private String trainingTypeName;
+    private String name;
 
-    public TrainingType(String trainingTypeName) {
-        this.trainingTypeName = trainingTypeName;
+    
+
+    public TrainingType() {}
+
+    public TrainingType(String name) {
+        this.name = name;
     }
 
-    public String getTrainingTypeName() {
-        return trainingTypeName;
+    public String getName() {
+        return name;
     }
 
-    public void setTrainingTypeName(String trainingTypeName) {
-        this.trainingTypeName = trainingTypeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "TrainingType [trainingTypeName=" + trainingTypeName + "]";
+        return "TrainingType [name=" + name + "]";
     }
 
 }

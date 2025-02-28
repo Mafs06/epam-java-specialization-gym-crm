@@ -1,46 +1,55 @@
 package com.epam.campus.gymcrm.daos;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.epam.campus.gymcrm.models.Trainee;
+import com.epam.campus.gymcrm.storage.Storage;
 
 @Repository
 public class TraineeDao implements Dao<Trainee>{
 
-    private List<Trainee> trainees = new ArrayList<>();
+    private final Storage storage;
+    private final String ENTITY_KEY = "Trainer";
 
-    public TraineeDao() {
-        trainees.add(new Trainee(1, "Pedro", "Picapiedra", "pepicapiedra", "yabadabadu", true, LocalDate.of(1000, Month.JANUARY, 1), "Flintstone House"));
-        trainees.add(new Trainee(2, "Beatriz", "Pinzon", "bettypinzon", "bettybetty", true, LocalDate.of(1999, Month.OCTOBER, 25), "Carrera 18A #43A – 59"));
+    @Autowired
+    public TraineeDao(Storage storage) {
+        this.storage = storage;
     }
 
     @Override
     public Optional<Trainee> get(int id) {
-        return trainees.stream()
-            .filter(trainee -> trainee.getTraineeID() == id)
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainee)
+            .map(obj -> (Trainee) obj)
+            .filter(trainer -> trainer.getTraineeID() == id)
             .findFirst();
     }
 
     @Override
     public List<Trainee> getAll() {
-        return trainees;
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainee)
+            .map(obj -> (Trainee) obj)
+            .collect(Collectors.toList());
     }
 
     @Override
     public void save(Trainee trainee) {
-        trainees.add(trainee);
+        storage.addData(ENTITY_KEY, trainee);
     }
 
     @Override
     public void update(Trainee trainee, String[] params) {
-        trainees.removeIf(t -> t.getTraineeID() == trainee.getTraineeID());
-
+        delete(trainee);
         trainee.setTraineeID(Integer.parseInt(params[0]));
         trainee.setFirstName(params[1]);
         trainee.setLastName(params[2]);
@@ -49,13 +58,13 @@ public class TraineeDao implements Dao<Trainee>{
         trainee.setActive(Boolean.parseBoolean(params[5]));
         trainee.setDateOfBirth(LocalDate.parse(params[6]));  
         trainee.setAddress(params[7]);  
-
-        trainees.add(trainee);
+        save(trainee);
     }
 
     @Override
     public void delete(Trainee trainee) {
-        trainees.remove(trainee);
+        storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .removeIf(obj -> obj instanceof Trainee && ((Trainee) obj).getTraineeID() == trainee.getTraineeID());
     }
 
 }

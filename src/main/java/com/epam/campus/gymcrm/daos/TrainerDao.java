@@ -3,42 +3,52 @@ package com.epam.campus.gymcrm.daos;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.epam.campus.gymcrm.models.Trainer;
+import com.epam.campus.gymcrm.storage.Storage;
 
 @Repository
 public class TrainerDao implements Dao<Trainer>{
 
-    private List<Trainer> trainers = new ArrayList<>();
+    private final Storage storage;
+    private final String ENTITY_KEY = "Trainer";
 
-    public TrainerDao() {
-        trainers.add(new Trainer(1, "Miles", "Morales", "milesssmo", "great_responsibilitiy", true, "Mobility"));
-        trainers.add(new Trainer(2, "Terry", "Crews ", "terryc", "oldspice", true, "Futbol"));
+    @Autowired
+    public TrainerDao(Storage storage) {
+        this.storage = storage;
     }
 
     @Override
     public Optional<Trainer> get(int id) {
-        return trainers.stream()
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainer)
+            .map(obj -> (Trainer) obj)
             .filter(trainer -> trainer.getTrainerID() == id)
             .findFirst();
     }
 
     @Override
     public List<Trainer> getAll() {
-        return trainers;
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainer)
+            .map(obj -> (Trainer) obj)
+            .collect(Collectors.toList());
     }
 
     @Override
     public void save(Trainer trainer) {
-        trainers.add(trainer);
+        storage.addData(ENTITY_KEY, trainer);
     }
 
     @Override
     public void update(Trainer trainer, String[] params) {
-        trainers.removeIf(t -> t.getTrainerID() == trainer.getTrainerID());
-
+        delete(trainer);
         trainer.setTrainerID(Integer.parseInt(params[0]));
         trainer.setFirstName(params[1]);
         trainer.setLastName(params[2]);
@@ -46,13 +56,13 @@ public class TrainerDao implements Dao<Trainer>{
         trainer.setPassword(params[4]);
         trainer.setActive(Boolean.parseBoolean(params[5]));
         trainer.setSpecialization(params[6]);
-
-        trainers.add(trainer);
+        save(trainer);
     }
 
     @Override
     public void delete(Trainer trainer) {
-        trainers.remove(trainer);
+        storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .removeIf(obj -> obj instanceof Trainer && ((Trainer) obj).getTrainerID() == trainer.getTrainerID());
     }
 
 }

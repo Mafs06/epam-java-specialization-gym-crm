@@ -12,6 +12,8 @@ public class Training {
     private LocalDate trainingDate;
     private int trainingDuration;
     
+    public Training() {}
+
     public Training(int trainingID, int traineeID, int trainerID, String trainingName, TrainingType trainingType, LocalDate trainingDate, int trainingDuration) {
         this.trainingID = trainingID;
         this.traineeID = traineeID;

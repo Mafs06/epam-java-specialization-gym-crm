@@ -1,0 +1,98 @@
+{
+  "Trainee": [
+    {
+      "traineeID": 1,
+      "firstName": "Pedro",
+      "lastName": "Picapiedra",
+      "username": "pepicapiedra",
+      "password": "yabadabadu",
+      "active": true,
+      "dateOfBirth": "1000-01-01",
+      "address": "Flintstone House"
+    },
+    {
+      "traineeID": 2,
+      "firstName": "Beatriz",
+      "lastName": "Pinzon",
+      "username": "bettypinzon",
+      "password": "bettybetty",
+      "active": true,
+      "dateOfBirth": "1999-10-25",
+      "address": "Carrera 18A #43A – 59"
+    },
+    {
+      "traineeID": 3,
+      "firstName": "John",
+      "lastName": "Doe",
+      "username": "johndoe",
+      "password": "password123",
+      "active": true,
+      "dateOfBirth": "2000-05-15",
+      "address": "123 Main Street"
+    }
+  ],
+  "Trainer": [
+    {
+      "trainerID": 1,
+      "firstName": "Miles",
+      "lastName": "Morales",
+      "username": "milesssmo",
+      "password": "great_responsibility",
+      "active": true,
+      "specialization": "Mobility"
+    },
+    {
+      "trainerID": 2,
+      "firstName": "Terry",
+      "lastName": "Crews",
+      "username": "terryc",
+      "password": "oldspice",
+      "active": true,
+      "specialization": "Futbol"
+    },
+    {
+      "trainerID": 3,
+      "firstName": "Bruce",
+      "lastName": "Wayne",
+      "username": "batman",
+      "password": "darkknight123",
+      "active": true,
+      "specialization": "Martial Arts"
+    }
+  ],
+  "Training": [
+    {
+      "trainingID": 1,
+      "traineeID": 1,
+      "trainerID": 1,
+      "trainingName": "Agility 101",
+      "trainingType": {
+        "name": "Agility"
+      },
+      "trainingDate": "2025-03-01",
+      "trainingDuration": 10
+    },
+    {
+      "trainingID": 2,
+      "traineeID": 2,
+      "trainerID": 2,
+      "trainingName": "Basics of Self Defense",
+      "trainingType": {
+        "name": "Self Defense"
+      },
+      "trainingDate": "2025-02-28",
+      "trainingDuration": 15
+    },
+    {
+      "trainingID": 3,
+      "traineeID": 3,
+      "trainerID": 3,
+      "trainingName": "Strength Training Advanced",
+      "trainingType": {
+        "name": "Strength Training"
+      },
+      "trainingDate": "2025-03-01",
+      "trainingDuration": 60
+    }
+  ]
+}

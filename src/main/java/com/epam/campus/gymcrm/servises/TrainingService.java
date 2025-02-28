@@ -31,16 +31,16 @@ public class TrainingService {
 
     public void createTraining(Training training) {
         trainingDao.save(training);
-        System.out.println("Training created!");
+        System.out.println("Training created: " + training.toString());
     }
 
     public void updateTraining(Training training, String[] params) {
         trainingDao.update(training, params);
-        System.out.println("Training updated!");
+        System.out.println("Training updated: " + training.toString());
     }
 
     public void deleteTraining(Training training) {
         trainingDao.delete(training);
-        System.out.println("Training deleted!");
+        System.out.println("Training deleted: " + training.toString());
     }
 }

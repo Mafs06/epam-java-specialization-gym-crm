@@ -15,14 +15,14 @@ import com.epam.campus.gymcrm.storage.Storage;
 @Repository
 public class TraineeDao implements Dao<Trainee>{
 
-    private final Storage storage;
+    private Storage storage;
     private final String ENTITY_KEY = "Trainer";
 
     @Autowired
-    public TraineeDao(Storage storage) {
+    public void setStorage(Storage storage) {
         this.storage = storage;
     }
-
+    
     @Override
     public Optional<Trainee> get(int id) {
         return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())

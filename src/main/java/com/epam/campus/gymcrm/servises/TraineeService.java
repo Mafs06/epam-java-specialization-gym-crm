@@ -12,10 +12,10 @@ import com.epam.campus.gymcrm.models.Trainee;
 @Service
 public class TraineeService {
 
-    private final TraineeDao traineeDao;
+    private TraineeDao traineeDao;
 
     @Autowired
-    public TraineeService(TraineeDao traineeDao) {
+    public void setTraineeDao(TraineeDao traineeDao) {
         this.traineeDao = traineeDao;
     }
 

@@ -16,11 +16,11 @@ import com.epam.campus.gymcrm.storage.Storage;
 @Repository
 public class TrainingDao implements Dao<Training>{
 
-    private final Storage storage;
+    private Storage storage;
     private final String ENTITY_KEY = "Training";
 
     @Autowired
-    public TrainingDao(Storage storage) {
+    public void setStorage(Storage storage) {
         this.storage = storage;
     }
 

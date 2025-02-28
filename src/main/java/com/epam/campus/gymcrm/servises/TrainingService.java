@@ -14,10 +14,10 @@ import com.epam.campus.gymcrm.models.Training;
 @Service
 public class TrainingService {
 
-    private final TrainingDao trainingDao;
+    private TrainingDao trainingDao;
 
     @Autowired
-    public TrainingService(TrainingDao trainingDao) {
+    public void setTrainingDao(TrainingDao trainingDao) {
         this.trainingDao = trainingDao;
     }
 

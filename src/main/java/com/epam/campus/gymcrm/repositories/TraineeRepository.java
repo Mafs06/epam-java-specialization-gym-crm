@@ -1,0 +1,99 @@
+package com.epam.campus.gymcrm.repositories;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.epam.campus.gymcrm.models.entities.Trainee;
+import com.epam.campus.gymcrm.models.entities.Trainer;
+import com.epam.campus.gymcrm.models.entities.User;
+import com.epam.campus.gymcrm.storage.Storage;
+
+@Repository
+public class TraineeRepository implements BaseRepository<Trainee>, UserBehaviour {
+
+    private Storage storage;
+    private final String ENTITY_KEY = "Trainee";
+
+    @Autowired
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
+    
+    @Override
+    public Optional<Trainee> get(int id) {
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainee)
+            .map(obj -> (Trainee) obj)
+            .filter(trainer -> trainer.getId() == id)
+            .findFirst();
+    }
+
+    @Override
+    public List<Trainee> getAll() {
+        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainee)
+            .map(obj -> (Trainee) obj)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public void save(Trainee trainee) {
+        storage.addData(ENTITY_KEY, trainee);
+    }
+
+    @Override
+    public void update(Trainee trainee) {
+        // Find and delete old trainee
+        delete(trainee);
+
+        // Rebuild the trainee with updated values
+        Trainee updatedTrainee = new Trainee.TraineeBuilder()
+            .id(trainee.getId())
+            .firstName(trainee.getFirstName())
+            .lastName(trainee.getLastName())
+            .active(trainee.isActive())
+            .dateOfBirth(trainee.getDateOfBirth())
+            .address(trainee.getAddress())
+            .build();
+
+        // Save the updated trainee
+        save(updatedTrainee);
+    }
+
+    @Override
+    public void delete(Trainee trainee) {
+        storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .removeIf(obj -> obj instanceof Trainee && ((Trainee) obj).getId() == trainee.getId());
+    }
+
+    @Override 
+    public List<String> getUsernames() {
+        List<String> usernames = new ArrayList<>();
+
+        List<String> traineesUsernames = storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainee)
+            .map(obj -> (Trainee) obj)
+            .map(User::getUsername)
+            .collect(Collectors.toList());
+        usernames.addAll(traineesUsernames);
+
+        List<String> trainersUsernames = storage.getStorage().getOrDefault("Trainer", new ArrayList<>())
+            .stream()
+            .filter(obj -> obj instanceof Trainer)
+            .map(obj -> (Trainer) obj)
+            .map(User::getUsername)
+            .collect(Collectors.toList());
+        usernames.addAll(trainersUsernames);
+
+        return usernames;
+    }
+
+}

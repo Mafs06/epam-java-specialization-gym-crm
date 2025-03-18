@@ -23,7 +23,7 @@ public class Storage {
 
     private static final Logger logger = LoggerFactory.getLogger(Storage.class);
 
-    private final String modelsPackagePath = "com.epam.campus.gymcrm.models";
+    private final String modelsPackagePath = "com.epam.campus.gymcrm.models.entities";
     private final Map<String, List<Object>> storage = new HashMap<>();
 
     @Value("${storage.filepath}")
@@ -46,14 +46,14 @@ public class Storage {
             JsonNode rootNode = objectMapper.readTree(reader);
 
             rootNode.fieldNames().forEachRemaining(entityName -> {
-                JsonNode entityRecords = rootNode.get(entityName);
-                if (entityRecords.isArray()) {
-                    List<Object> recordsList = new ArrayList<>();
-                    for (JsonNode record : entityRecords) {
+                JsonNode entityEntries = rootNode.get(entityName);
+                if (entityEntries.isArray()) {
+                    List<Object> entriesList = new ArrayList<>();
+                    for (JsonNode entry : entityEntries) {
                         try {
                             Class<?> c = Class.forName(modelsPackagePath + "." + entityName);
-                            Object o = objectMapper.treeToValue(record, c);
-                            recordsList.add(o);
+                            Object o = objectMapper.treeToValue(entry, c);
+                            entriesList.add(o);
                         } catch (ClassNotFoundException e) {
                             logger.error("Entity model not found: {}", entityName, e);
                             break;
@@ -63,9 +63,9 @@ public class Storage {
                             logger.error("Invalid entity to map to: {}", entityName, e);
                         }
                     }
-                    if (!recordsList.isEmpty()) {
-                        storage.put(entityName, recordsList);
-                        logger.info("Loaded {} records for entity: {}", recordsList.size(), entityName);
+                    if (!entriesList.isEmpty()) {
+                        storage.put(entityName, entriesList);
+                        logger.info("Loaded {} entries for entity: {}", entriesList.size(), entityName);
                     }
                 }
             });
@@ -81,6 +81,6 @@ public class Storage {
 
     public void addData(String key, Object value) {
         storage.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
-        logger.info("Added data to storage: key={}, value={}", key, value);
+        logger.info("Added data to storage: key={}", key);
     }
 }

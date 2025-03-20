@@ -7,10 +7,10 @@ public class Training {
     private int id;
     private int traineeID;
     private int trainerID;
-    private String trainingName;
-    private TrainingType trainingType;
-    private LocalDate trainingDate;
-    private int trainingDuration;
+    private String name;
+    private int trainingTypeID;
+    private LocalDate date;
+    private int duration;
     
     public Training() {}
 
@@ -18,10 +18,10 @@ public class Training {
         this.id = builder.id;
         this.traineeID = builder.traineeID;
         this.trainerID = builder.trainerID;
-        this.trainingName = builder.trainingName;
-        this.trainingType = new TrainingType(builder.trainingName);
-        this.trainingDate = builder.trainingDate;
-        this.trainingDuration = builder.trainingDuration;
+        this.name = builder.name;
+        this.trainingTypeID = builder.trainingTypeID;
+        this.date = builder.date;
+        this.duration = builder.duration;
     }
 
     public int getId() {
@@ -36,36 +36,37 @@ public class Training {
         return trainerID;
     }
 
-    public String getTrainingName() {
-        return trainingName;
+    public String getName() {
+        return name;
     }
 
-    public TrainingType getTrainingType() {
-        return trainingType;
+    public int gettrainingTypeID() {
+        return trainingTypeID;
     }
 
-    public LocalDate getTrainingDate() {
-        return trainingDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public int getTrainingDuration() {
-        return trainingDuration;
+    public int getDuration() {
+        return duration;
     }
 
     @Override
     public String toString() {
         return "Training [id=" + id + ", traineeID=" + traineeID + ", trainerID=" + trainerID
-                + ", trainingName=" + trainingName + ", trainingType=" + trainingType + ", trainingDate=" + trainingDate
-                + ", trainingDuration=" + trainingDuration + "]";
+                + ", name=" + name + ", trainingTypeID=" + trainingTypeID + ", date=" + date
+                + ", duration=" + duration + "]";
     }
 
     public static class TrainingBuilder {
         private int id;
         private int traineeID;
         private int trainerID;
-        private String trainingName;
-        private LocalDate trainingDate;
-        private int trainingDuration;
+        private String name;
+        private int trainingTypeID;
+        private LocalDate date;
+        private int duration;
 
         public TrainingBuilder id(int id) {
             this.id = id;
@@ -82,18 +83,23 @@ public class Training {
             return this;
         }
 
-        public TrainingBuilder trainingName(String trainingName) {
-            this.trainingName = trainingName;
+        public TrainingBuilder name(String name) {
+            this.name = name;
             return this;
         }
 
-        public TrainingBuilder trainingDate(LocalDate trainingDate) {
-            this.trainingDate = trainingDate;
+        public TrainingBuilder trainingTypeID(int trainingTypeID) {
+            this.trainingTypeID = trainingTypeID;
             return this;
         }
 
-        public TrainingBuilder trainingDuration(int trainingDuration) {
-            this.trainingDuration = trainingDuration;
+        public TrainingBuilder date(LocalDate date) {
+            this.date = date;
+            return this;
+        }
+
+        public TrainingBuilder duration(int duration) {
+            this.duration = duration;
             return this;
         }
 

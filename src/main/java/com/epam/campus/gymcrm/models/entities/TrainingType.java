@@ -2,12 +2,18 @@ package com.epam.campus.gymcrm.models.entities;
 
 public class TrainingType {
 
+    private int id;
     private String name;
 
     public TrainingType() {}
 
-    public TrainingType(String name) {
+    public TrainingType(int id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -20,7 +26,7 @@ public class TrainingType {
 
     @Override
     public String toString() {
-        return "TrainingType [name=" + name + "]";
+        return "TrainingType [id=" + id + " name=" + name + "]";
     }
 
 }

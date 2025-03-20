@@ -1,74 +1,53 @@
 package com.epam.campus.gymcrm.models.entities;
 
-public class Trainer extends User {
+public class Trainer {
 
     private int id;
-    private String specialization;
+    private int specializationID;
+    private int userID;
 
-    public Trainer() {
-        super();
-    }
+    public Trainer() {}
 
     public Trainer(TrainerBuilder builder) {
-        super(builder.firstName, builder.lastName, builder.username, builder.password, builder.active);
-        this.specialization = builder.specialization;
         this.id = builder.id;
+        this.specializationID = builder.specializationID;
+        this.userID = builder.userID;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getSpecialization() {
-        return specialization;
+    public int getSpecializationID() {
+        return specializationID;
+    }
+
+    public int getUserID() {
+        return userID;
     }
 
     @Override
     public String toString() {
-        return "Trainer [id=" + id + ", user=" + super.toString() + " specialization=" + specialization + "]";
+        return "Trainer [id=" + id + " specializationID=" + specializationID + ", userID=" + userID + "]";
     }
 
     public static class TrainerBuilder {
         private int id;
-        private String firstName;
-        private String lastName;
-        private String username;
-        private String password;
-        private boolean active;
-        private String specialization;
+        private int specializationID;
+        private int userID;
 
         public TrainerBuilder id(int id) {
             this.id = id;
             return this;
         }
 
-        public TrainerBuilder firstName(String firstName) {
-            this.firstName = firstName;
+        public TrainerBuilder specialization(int specializationID) {
+            this.specializationID = specializationID;
             return this;
         }
 
-        public TrainerBuilder lastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public TrainerBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public TrainerBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public TrainerBuilder active(boolean active) {
-            this.active = active;
-            return this;
-        }
-
-        public TrainerBuilder specialization(String specialization) {
-            this.specialization = specialization;
+        public TrainerBuilder userID(int userID) {
+            this.userID = userID;
             return this;
         }
 

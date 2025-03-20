@@ -2,21 +2,20 @@ package com.epam.campus.gymcrm.models.entities;
 
 import java.time.LocalDate;
 
-public class Trainee extends User {
+public class Trainee {
 
     private int id;
     private LocalDate dateOfBirth;
     private String address;
+    private int userID;
 
-    public Trainee() {
-        super();
-    }
+    public Trainee() {}
 
     public Trainee(TraineeBuilder builder) {
-        super(builder.firstName, builder.lastName, builder.username, builder.password, builder.active);
         this.id = builder.id;
         this.dateOfBirth = builder.dateOfBirth;
         this.address = builder.address;
+        this.userID = builder.userID;
     }
 
     public int getId() {
@@ -31,48 +30,23 @@ public class Trainee extends User {
         return address;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
     @Override
     public String toString() {
-        return "Trainee [id=" + id + ", user=" + super.toString() + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
+        return "Trainee [id=" + id + ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", userID=" + userID + "]";
     }
 
     public static class TraineeBuilder {
         private int id;
-        private String firstName;
-        private String lastName;
-        private String username;
-        private String password;
-        private boolean active;
         private LocalDate dateOfBirth;
         private String address;
+        private int userID;
 
         public TraineeBuilder id(int id) {
             this.id = id;
-            return this;
-        }
-
-        public TraineeBuilder firstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public TraineeBuilder lastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public TraineeBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public TraineeBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-        
-        public TraineeBuilder active(boolean active) {
-            this.active = active;
             return this;
         }
 
@@ -83,6 +57,11 @@ public class Trainee extends User {
 
         public TraineeBuilder address(String address) {
             this.address = address;
+            return this;
+        }
+
+        public TraineeBuilder userID(int userID) {
+            this.userID = userID;
             return this;
         }
 

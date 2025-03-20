@@ -1,5 +1,7 @@
 package com.epam.campus.gymcrm;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.context.ApplicationContext;
@@ -7,6 +9,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.epam.campus.gymcrm.config.Config;
 import com.epam.campus.gymcrm.facade.GymFacade;
+import com.epam.campus.gymcrm.models.entities.TrainingType;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 public class App {
     public static void main(String[] args) {
@@ -18,15 +25,30 @@ public class App {
         String traineeData = userData + ", birth date, address";
         String trainerData =  userData + ", specialization";
         String trainingData = "id, trainee id, trainer id, training name, trainind date, duration (minutes)";
+        List<String> trainingTypes = new ArrayList<String>(List.of("fitness", "yoga", "zumba", "stretching", "resistance"));
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
-        GymFacade gymFacade = context.getBean(GymFacade.class);
+        //ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+        //GymFacade gymFacade = context.getBean(GymFacade.class);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("gym_persistence_unit");
+        EntityManager em = emf.createEntityManager();
+
+        TrainingType trainingType;
+        try {
+            for (int i=0; i<trainingTypes.size(); i++) {
+                em.getTransaction().begin();
+                trainingType = new TrainingType();
+                trainingType.setName(trainingTypes.get(i));
+                em.persist(trainingType);
+                em.getTransaction().commit();
+            }
+        } finally {
+            em.close();
+        }
 
         System.out.println();
-
         System.out.println("Welcome to our Gym CRM!");
 
-        try (Scanner sc = new Scanner(System.in)) {
+        /*try (Scanner sc = new Scanner(System.in)) {
 
             while(true) {
                 System.out.println("\nWhat would you like to do? Enter the corresponding option.");
@@ -171,6 +193,6 @@ public class App {
             }
         }
 
-        ((AnnotationConfigApplicationContext) context).close();
+        ((AnnotationConfigApplicationContext) context).close(); */
     }
 }

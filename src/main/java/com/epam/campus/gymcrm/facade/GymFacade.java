@@ -2,15 +2,21 @@ package com.epam.campus.gymcrm.facade;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerDto;
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
+import com.epam.campus.gymcrm.models.dtos.TrainingTypeDto;
+import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.services.impl.TraineeService;
 import com.epam.campus.gymcrm.services.impl.TrainerService;
 import com.epam.campus.gymcrm.services.impl.TrainingService;
+import com.epam.campus.gymcrm.services.impl.TrainingTypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GymFacade {
 
@@ -19,92 +25,87 @@ public class GymFacade {
     private final TrainingService trainingService;
 
     @Autowired
-    public GymFacade(TrainerService trainerService, TraineeService traineeService, TrainingService trainingService) {
+    public GymFacade(TrainerService trainerService, TraineeService traineeService, TrainingService trainingService, TrainingTypeService trainingTypeService) {
         this.trainerService = trainerService;
         this.traineeService = traineeService;
         this.trainingService = trainingService;
     }
 
-    // Trainee methods
-    public TraineeDto getTrainee(int id) {
-        return traineeService.getTrainee(id);
+    //* Trainee/Trainer operations
+
+    // TODO: Get Trainee/Trainer profile by username
+
+    // TODO: Trainee/Trainer username and password matching
+    public boolean traineeLogin(String username, String password) {
+        return false;
     }
 
-    public List<TraineeDto> getAllTrainees() {
-        return traineeService.getTrainees();
+    public boolean trainerLogin(String username, String password) {
+        return trainerService.trainerLogin(username, password);
     }
 
+    // TODO: Trainee/Trainer password change
+
+    // TODO: Activate/De-activate Trainee/Trainer
+
+    //* Trainee operations
+
+    // Create Trainee profile
     public void createTrainee(String[] params) {
         TraineeDto traineeDto = new TraineeDto(
-            Integer.parseInt(params[0]),
-            params[1],
-            params[2],
-            Boolean.parseBoolean(params[3]),
-            LocalDate.parse(params[4]),
-            params[5]);
+            params[0],                          // firstName
+            params[1],                          // lastName
+            Boolean.parseBoolean(params[2]),    // active
+            LocalDate.parse(params[3]),         // dateOfBirth
+            params[4]);                         // adress
         
         traineeService.createTrainee(traineeDto);
     }
 
+    // Update Trainee profile
     public void updateTrainee(int id, String[] params) {
         TraineeDto traineeDto = new TraineeDto(
-            Integer.parseInt(params[0]),
+            params[0],
             params[1],
-            params[2],
-            Boolean.parseBoolean(params[3]),
-            LocalDate.parse(params[4]),
-            params[5]);
+            Boolean.parseBoolean(params[2]),
+            LocalDate.parse(params[3]),
+            params[4]);
 
         traineeService.updateTrainee(id, traineeDto);
     }
 
-    public void deleteTrainee(int id) {
-        traineeService.deleteTrainee(id);
-    }
+    // TODO: Update Trainee's trainers list
 
-    // Trainer methods
-    public TrainerDto getTrainer(int id) {
-        return trainerService.getTrainer(id);
-    }
+    // TODO: Delete Trainee profile by username
 
-    public List<TrainerDto> getAllTrainers() {
-        return trainerService.getTrainers();
-    }
+    //* Trainer operations
 
+    // Create Trainer profile
     public void createTrainer(String[] params) {
         TrainerDto trainerDto = new TrainerDto(
-            Integer.parseInt(params[0]),
-            params[1],
-            params[2],
-            Boolean.parseBoolean(params[3]),
-            params[4]);
+            params[0],                          // firstName
+            params[1],                          // lastName
+            Boolean.parseBoolean(params[2]),    // active
+            Integer.parseInt(params[3]));       //trainingType
 
         trainerService.createTrainer(trainerDto);
     }
 
+    // TODO: Get Trainers list not assigned on trainee, by trainee's username
+
+    // Update Trainer profile
     public void updateTrainer(int id, String[] params) {
         TrainerDto trainerDto = new TrainerDto(
-            Integer.parseInt(params[0]),
-            params[1],
-            params[2],
-            Boolean.parseBoolean(params[3]),
-            params[4]);
+            params[0],                          // firstName
+            params[1],                          // lastName
+            Boolean.parseBoolean(params[2]),    // active
+            Integer.parseInt(params[3]));       //trainingType
         trainerService.updateTrainer(id, trainerDto);
     }
 
-    public void deleteTrainer(int id) {
-        trainerService.deleteTrainer(id);
-    }
+    //* Training operations
 
-    // Training methods
-    public TrainingDto getTraining(int id) {
-        return trainingService.getTraining(id);
-    }
-
-    public List<TrainingDto> getAllTrainings() {
-        return trainingService.getTrainings();
-    }
-
+    // Create training
     public void createTraining(String[] params) {
         TrainingDto trainingDto = new TrainingDto(
             Integer.parseInt(params[0]),
@@ -117,20 +118,13 @@ public class GymFacade {
         trainingService.createTraining(trainingDto);
     }
 
-    public void updateTraining(int id, String[] params) {
-        TrainingDto trainingDto = new TrainingDto(
-            Integer.parseInt(params[0]),
-            Integer.parseInt(params[1]),
-            Integer.parseInt(params[2]),
-            params[3],
-            LocalDate.parse(params[4]),
-            Integer.parseInt(params[5]));
+    // TODO: Get Trainee Trainings List by trainee username and criteria
 
-        trainingService.updateTraining(id, trainingDto);
-    }
+    // TODO: Get Trainer Trainings List by trainer username and criteria
 
     public void deleteTraining(int id) {
         trainingService.deleteTraining(id);
     }
+
 }
 

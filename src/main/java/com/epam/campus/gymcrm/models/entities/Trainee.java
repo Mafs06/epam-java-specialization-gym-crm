@@ -25,7 +25,7 @@ public class Trainee {
 
     private String address;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
@@ -38,7 +38,7 @@ public class Trainee {
         this.id = builder.id;
         this.dateOfBirth = builder.dateOfBirth;
         this.address = builder.address;
-        this.user = new User(builder.userID, builder.firstName, builder.lastName, builder.username, builder.password, builder.active);
+        this.user = builder.user;
     }
 
     public int getId() {
@@ -66,44 +66,7 @@ public class Trainee {
         private int id;
         private LocalDate dateOfBirth;
         private String address;
-
-        // User data
-        private int userID;
-        private String firstName;
-        private String lastName;
-        private String username;
-        private String password;
-        private boolean active;
-
-        public TraineeBuilder userID(int userID) {
-            this.userID = userID;
-            return this;
-        }
-
-        public TraineeBuilder firstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public TraineeBuilder lastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public TraineeBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public TraineeBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-        
-        public TraineeBuilder active(boolean active) {
-            this.active = active;
-            return this;
-        }
+        private User user;
 
         public TraineeBuilder id(int id) {
             this.id = id;
@@ -117,6 +80,11 @@ public class Trainee {
 
         public TraineeBuilder address(String address) {
             this.address = address;
+            return this;
+        }
+
+        public TraineeBuilder user(User user) {
+            this.user = user;
             return this;
         }
 

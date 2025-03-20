@@ -13,10 +13,9 @@
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/gym" />
             <property name="jakarta.persistence.jdbc.user" value="postgres" />
             <property name="jakarta.persistence.jdbc.password" value="1234" />
-            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create" />
+            <property name="jakarta.persistence.schema-generation.database.action" value="update" />
 
             <property name="hibernate.jdbc.time_zone" value="UTC" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
             <property name="hibernate.show.sql" value="true" />
         </properties>
     </persistence-unit>

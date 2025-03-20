@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.epam.campus.gymcrm.mappers.TraineeMapper;
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
 import com.epam.campus.gymcrm.models.entities.Trainee;
+import com.epam.campus.gymcrm.models.entities.User;
 import com.epam.campus.gymcrm.repositories.TraineeRepository;
 import com.epam.campus.gymcrm.services.ITraineeService;
 import com.epam.campus.gymcrm.utils.UserUtil;
@@ -56,19 +57,36 @@ public class TraineeService implements ITraineeService {
 
     @Override
     public void createTrainee(TraineeDto newTraineeDto) {
-        String username = UserUtil.generateUsername(
-            newTraineeDto.getFirstName(),
-            newTraineeDto.getLastName(),
-            traineeDao.getUsernames()
-        );
-        String password = UserUtil.generatePassword();
+        try {
+            String username = UserUtil.generateUsername(
+                newTraineeDto.getFirstName(),
+                newTraineeDto.getLastName(),
+                traineeDao.getUsernames()
+            );
+            String password = UserUtil.generatePassword();
 
-        Trainee trainee = mapper.toTrainee(newTraineeDto);
-        trainee.setUsername(username);
-        trainee.setPassword(password);
+            User user = new User();
+            user.setFirstName(newTraineeDto.getFirstName());
+            user.setLastName(newTraineeDto.getLastName());
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setActive(newTraineeDto.isActive());
 
-        traineeDao.save(trainee);
-        logger.info("Trainee created");
+            Trainee trainee = mapper.toTrainee(newTraineeDto, username, password);
+
+            traineeDao.save(trainee);
+            System.out.println("Trainee created with username: " + trainee.getUser().getUsername());
+
+        } catch (IllegalArgumentException e) {
+            logger.error("Validation error when adding trainee: {}", e.getMessage());
+            System.err.println("There was an error and trainee could not be added. Verify specialization id data.");
+            return;
+
+        } catch (Exception e) {
+            logger.error("Unexpected error while adding trainee: {}", e.getMessage(), e);
+            System.err.println("There was an error and trainee could not be added.");
+            return;
+        }
     }
 
     @Override

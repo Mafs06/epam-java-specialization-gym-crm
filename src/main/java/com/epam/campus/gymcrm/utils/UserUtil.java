@@ -18,7 +18,7 @@ public class UserUtil {
             username = baseUsername + counter;
             counter++;
         }
-        System.out.println("Username: "+ username);
+        
         return username;
     }
 

@@ -19,14 +19,21 @@ public class TrainingType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "training_type_name", nullable = false)
+    @Column(name = "training_type_name", nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL)
     private List<Training> trainings;
 
+    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL)
+    private List<Trainer> trainers;
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -39,7 +46,7 @@ public class TrainingType {
 
     @Override
     public String toString() {
-        return "TrainingType [id=" + id + " name=" + name + "]";
+        return "TrainingType [id=" + id + ", name=" + name + "]";
     }
 
 }

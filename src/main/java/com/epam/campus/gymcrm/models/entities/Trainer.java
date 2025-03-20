@@ -3,12 +3,13 @@ package com.epam.campus.gymcrm.models.entities;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -19,10 +20,11 @@ public class Trainer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "specialization_id", nullable = false)
-    private int specializationID;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "specialization" , nullable = false)
+    private TrainingType trainingType;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
@@ -33,67 +35,42 @@ public class Trainer {
 
     public Trainer(TrainerBuilder builder) {
         this.id = builder.id;
-        this.specializationID = builder.specializationID;
-        this.user = new User(builder.userID, builder.firstName, builder.lastName, builder.username, builder.password, builder.active);
+        this.trainingType = builder.trainingType;
+        this.user = builder.user;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getSpecializationID() {
-        return specializationID;
+    public TrainingType getTrainingType() {
+        return trainingType;
     }
 
     public User getUser() {
         return user;
     }
 
+    public void setTrainingType(TrainingType trainingType) {
+        this.trainingType = trainingType;
+    }
+
     @Override
     public String toString() {
-        return "Trainer [id=" + id + ", specializationID=" + specializationID + ", user=" + user.toString() + "]";
+        return "Trainer [id=" + id + ", trainingType=" + trainingType + ", user=" + user.toString() + "]";
     }
 
     public static class TrainerBuilder {
         private int id;
-        private int specializationID;
+        private TrainingType trainingType;
+        private User user;
 
-        // User data
-        private int userID;
-        private String firstName;
-        private String lastName;
-        private String username;
-        private String password;
-        private boolean active;
+        public TrainerBuilder() {}
 
-        public TrainerBuilder userID(int userID) {
-            this.userID = userID;
-            return this;
-        }
-
-        public TrainerBuilder firstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public TrainerBuilder lastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public TrainerBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public TrainerBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-        
-        public TrainerBuilder active(boolean active) {
-            this.active = active;
-            return this;
+        public TrainerBuilder(Trainer existingTrainer) {
+            this.id = existingTrainer.getId();
+            this.trainingType = existingTrainer.getTrainingType();
+            this.user = existingTrainer.getUser();
         }
 
         public TrainerBuilder id(int id) {
@@ -101,8 +78,13 @@ public class Trainer {
             return this;
         }
 
-        public TrainerBuilder specialization(int specializationID) {
-            this.specializationID = specializationID;
+        public TrainerBuilder trainingType(TrainingType trainingType) {
+            this.trainingType = trainingType;
+            return this;
+        }
+
+        public TrainerBuilder user(User user) {
+            this.user = user;
             return this;
         }
 

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
 import com.epam.campus.gymcrm.models.entities.Trainee;
+import com.epam.campus.gymcrm.models.entities.Trainer;
+import com.epam.campus.gymcrm.models.entities.User;
 
 @Component
 public class TraineeMapper {
@@ -20,18 +22,19 @@ public class TraineeMapper {
         return traineeDto;
     }
 
-    public Trainee toTrainee(TraineeDto traineeDto) {
-        // username and password not set
-        Trainee trainee = new Trainee.TraineeBuilder()
-            .id(traineeDto.getId())
-            .firstName(traineeDto.getFirstName())
-            .lastName(traineeDto.getLastName())
-            .active(traineeDto.isActive())
+    public Trainee toTrainee(TraineeDto traineeDto, String username, String password) {
+        User user = new User(
+            traineeDto.getFirstName(),
+            traineeDto.getLastName(),
+            username,
+            password,
+            traineeDto.isActive());
+
+        return new Trainee.TraineeBuilder()
             .dateOfBirth(traineeDto.getDateOfBirth())
             .address(traineeDto.getAddress())
+            .user(user)
             .build();
-
-        return trainee;
     }
 
     public Trainee toTrainee(TraineeDto traineeDto, Trainee existingTrainee) {

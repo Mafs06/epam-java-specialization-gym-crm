@@ -3,80 +3,122 @@ package com.epam.campus.gymcrm.repositories;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.epam.campus.gymcrm.models.entities.Trainee;
 import com.epam.campus.gymcrm.models.entities.Trainer;
-import com.epam.campus.gymcrm.models.entities.User;
-import com.epam.campus.gymcrm.storage.Storage;
+import com.epam.campus.gymcrm.utils.JPAUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 @Repository
 public class TrainerRepository implements BaseRepository<Trainer>, UserBehaviour{
 
-    private Storage storage;
-    private final String ENTITY_KEY = "Trainer";
-
-    @Autowired
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
-
     @Override
     public Optional<Trainer> get(int id) {
-        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
-            .stream()
-            .filter(obj -> obj instanceof Trainer)
-            .map(obj -> (Trainer) obj)
-            .filter(trainer -> trainer.getId() == id)
-            .findFirst();
+        EntityManager em = JPAUtil.getEntityManager();
+        Optional<Trainer> result = Optional.empty();
+
+        try {
+            Trainer trainer = em.find(Trainer.class, id);
+            result = Optional.ofNullable(trainer);
+        } finally {
+            em.close();
+        }
+
+        return result;
     }
 
     @Override
     public List<Trainer> getAll() {
-        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
-            .stream()
-            .filter(obj -> obj instanceof Trainer)
-            .map(obj -> (Trainer) obj)
-            .collect(Collectors.toList());
+        EntityManager em = JPAUtil.getEntityManager();
+        List<Trainer> results = new ArrayList<>();
+
+        try {
+            TypedQuery<Trainer> query = em.createQuery("SELECT t FROM Trainer t", Trainer.class);
+            results = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return results;
     }
 
     @Override
     public void save(Trainer trainer) {
-        storage.addData(ENTITY_KEY, trainer);
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            em.persist(trainer);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            e.printStackTrace();
+
+            throw e;
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public void update(Trainer trainer) {
-        // Find and delete old trainer
-        delete(trainer);
-    
-        // Rebuild the trainer with updated values
-        Trainer updatedTrainer = new Trainer.TrainerBuilder()
-                .id(trainer.getId())
-                .firstName(trainer.getFirstName())
-                .lastName(trainer.getLastName())
-                .active(trainer.isActive())
-                .specialization(trainer.getSpecialization())
-                .build();
-    
-        // Save the updated trainer
-        save(updatedTrainer);
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            em.merge(trainer);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public void delete(Trainer trainer) {
-        storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
-            .removeIf(obj -> obj instanceof Trainer && ((Trainer) obj).getId() == trainer.getId());
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            trainer = em.contains(trainer) ? trainer : em.merge(trainer);
+            em.remove(trainer);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public List<String> getUsernames() {
         List<String> usernames = new ArrayList<>();
 
-        List<String> trainersUsernames = storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
+        /*List<String> trainersUsernames = storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
             .stream()
             .filter(obj -> obj instanceof Trainer)
             .map(obj -> (Trainer) obj)
@@ -90,9 +132,26 @@ public class TrainerRepository implements BaseRepository<Trainer>, UserBehaviour
             .map(obj -> (Trainee) obj)
             .map(User::getUsername)
             .collect(Collectors.toList());
-        usernames.addAll(traineesUsernames);
+        usernames.addAll(traineesUsernames);*/
 
         return usernames;
+    }
+
+    @Override
+    public Optional<Object> getByUsername(String username) {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            Trainer trainer = em.createQuery(
+                "SELECT t FROM Trainer t WHERE t.user.username = :username", Trainer.class)
+                .setParameter("username", username)
+                .getSingleResult();
+
+            return Optional.of(trainer);
+            
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
 }

@@ -2,31 +2,21 @@ package com.epam.campus.gymcrm.models.dtos;
 
 import java.time.LocalDate;
 
-// DTO for the Trainee entity, does not contain username nor password
+// DTO for the Trainee entity, does not contain ids nor username/password
 public class TraineeDto {
 
-    private int id;
     private String firstName;
     private String lastName;
     private boolean active;
     private LocalDate dateOfBirth;
     private String address;
 
-    public TraineeDto(int id, String firstName, String lastName, boolean active, LocalDate dateOfBirth, String address) {
-        this.id = id;
+    public TraineeDto(String firstName, String lastName, boolean active, LocalDate dateOfBirth, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.active = active;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -71,8 +61,8 @@ public class TraineeDto {
 
     @Override
     public String toString() {
-        return "[id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", active=" + active + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
+        return "[firstName=" + firstName + ", lastName=" + lastName + ", active=" + active
+            + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
     }
 
 }

@@ -40,8 +40,7 @@ public class User {
 
     public User() {}
 
-    public User(int id, String firstName, String lastName, String username, String password, boolean active) {
-        this.id = id;
+    public User(String firstName, String lastName, String username, String password, boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -99,7 +98,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id= " + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", password=" + password + ", active=" + active + "]";
+        return "User [id= " + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", password data not available, active=" + active + "]";
     }
 
 }

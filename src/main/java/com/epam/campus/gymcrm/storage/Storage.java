@@ -29,7 +29,7 @@ public class Storage {
     @Value("${storage.filepath}")
     private String filePath;
 
-    @PostConstruct
+    //@PostConstruct
     public void initializeStorage() {
         logger.info("Initializing storage from file: {}", filePath);
         

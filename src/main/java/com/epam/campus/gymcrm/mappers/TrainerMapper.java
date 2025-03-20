@@ -4,45 +4,43 @@ import org.springframework.stereotype.Component;
 
 import com.epam.campus.gymcrm.models.dtos.TrainerDto;
 import com.epam.campus.gymcrm.models.entities.Trainer;
+import com.epam.campus.gymcrm.models.entities.TrainingType;
+import com.epam.campus.gymcrm.models.entities.User;
 
 @Component
 public class TrainerMapper {
 
     public TrainerDto toDto(Trainer trainer) {
         TrainerDto trainerDto = new TrainerDto(
-            trainer.getId(),
-            trainer.getFirstName(),
-            trainer.getLastName(),
-            trainer.isActive(),
-            trainer.getSpecialization());
+            trainer.getUser().getFirstName(),
+            trainer.getUser().getLastName(),
+            trainer.getUser().isActive(),
+            trainer.getTrainingType().getId());
 
         return trainerDto;
     }
 
-    public Trainer toTrainer(TrainerDto trainerDto) {
-        // username and password not set
-        Trainer trainer = new Trainer.TrainerBuilder()
-            .id(trainerDto.getId())
-            .firstName(trainerDto.getFirstName())
-            .lastName(trainerDto.getLastName())
-            .active(trainerDto.isActive())
-            .specialization(trainerDto.getSpecialization())
-            .build();
+    public Trainer toTrainer(TrainerDto trainerDto, TrainingType trainingType, String username, String password) {
+        User user = new User(
+            trainerDto.getFirstName(),
+            trainerDto.getLastName(),
+            username,
+            password,
+            trainerDto.isActive());
 
-        return trainer;
+        return new Trainer.TrainerBuilder()
+            .trainingType(trainingType)
+            .user(user)
+            .build();
     }
 
-    public Trainer toTrainer(TrainerDto trainerDto, Trainer existingTrainer) {
-        Trainer updatedTrainer = new Trainer.TrainerBuilder()
-            .id(existingTrainer.getId()) // Keep id
-            .firstName(trainerDto.getFirstName())
-            .lastName(trainerDto.getLastName())
-            .username(existingTrainer.getUsername()) // Keep username
-            .password(existingTrainer.getPassword()) // Keep password
-            .active(trainerDto.isActive())
-            .specialization(trainerDto.getSpecialization())
-            .build();
-
-        return updatedTrainer;
+    public void updateTrainerEntity(TrainerDto trainerDto, Trainer existingTrainer, TrainingType trainingType) {
+        User updatedUser = existingTrainer.getUser();
+        updatedUser.setFirstName(trainerDto.getFirstName());
+        updatedUser.setLastName(trainerDto.getLastName());
+        updatedUser.setActive(trainerDto.isActive());
+    
+        existingTrainer.setTrainingType(trainingType);
     }
+    
 }

@@ -8,6 +8,8 @@ public class TrainerDto {
     private boolean active;
     private int specialization;
 
+    public TrainerDto() {}
+
     public TrainerDto(String firstName, String lastName, boolean active, int specialization) {
         this.firstName = firstName;
         this.lastName = lastName;

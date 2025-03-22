@@ -14,14 +14,6 @@ import com.epam.campus.gymcrm.storage.Storage;
 @Repository
 public class TrainingRepository implements BaseRepository<Training>{
 
-    private Storage storage;
-    private final String ENTITY_KEY = "Training";
-
-    @Autowired
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
-
     @Override
     public Optional<Training> get(int id) {
         return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())

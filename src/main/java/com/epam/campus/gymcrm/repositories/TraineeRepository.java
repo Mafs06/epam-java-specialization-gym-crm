@@ -18,14 +18,6 @@ import jakarta.persistence.EntityManager;
 
 @Repository
 public class TraineeRepository implements BaseRepository<Trainee>, UserBehaviour {
-
-    private Storage storage;
-    private final String ENTITY_KEY = "Trainee";
-
-    @Autowired
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
     
     @Override
     public Optional<Trainee> get(int id) {
@@ -116,6 +108,12 @@ public class TraineeRepository implements BaseRepository<Trainee>, UserBehaviour
         usernames.addAll(trainersUsernames); */
 
         return usernames;
+    }
+
+    @Override
+    public Optional<Object> getByUsername(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getByUsername'");
     }
 
 }

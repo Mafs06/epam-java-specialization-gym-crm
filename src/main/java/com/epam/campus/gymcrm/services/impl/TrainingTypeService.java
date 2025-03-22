@@ -40,4 +40,11 @@ public class TrainingTypeService implements ITrainingTypeService {
         return mapper.toDto(trainingType);
     }
 
+    @Override
+    public void createTrainingType(TrainingTypeDto newTrainingTypeDto) {
+        logger.info("Adding new training type: {}", newTrainingTypeDto.toString());
+        trainingTypeDao.save(mapper.toTrainingType(newTrainingTypeDto));
+
+    }
+
 }

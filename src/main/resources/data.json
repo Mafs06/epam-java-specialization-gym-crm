@@ -1,7 +1,23 @@
 {
+  "TrainingType":[
+    {
+      "name": "fitness"
+    },
+    {
+      "name": "yoga"
+    },
+    {
+      "name": "zumba"
+    },
+    {
+      "name": "stretching"
+    },
+    {
+      "name": "resistance"
+    }
+  ],
   "Trainee": [
     {
-      "id": 1,
       "firstName": "Pedro",
       "lastName": "Picapiedra",
       "active": true,
@@ -9,7 +25,6 @@
       "address": "Flintstone House"
     },
     {
-      "id": 2,
       "firstName": "Beatriz",
       "lastName": "Pinzon",
       "active": true,
@@ -17,7 +32,6 @@
       "address": "Carrera 18A #43A 59"
     },
     {
-      "id": 3,
       "firstName": "John",
       "lastName": "Doe",
       "active": true,
@@ -25,7 +39,6 @@
       "address": "123 Main Street"
     },
     {
-      "id": 4,
       "firstName": "John",
       "lastName": "Doe",
       "active": false,
@@ -35,78 +48,28 @@
   ],
   "Trainer": [
     {
-      "id": 1,
       "firstName": "Miles",
       "lastName": "Morales",
       "active": true,
-      "specialization": "Mobility"
+      "specialization": 1
     },
     {
-      "id": 2,
       "firstName": "Terry",
       "lastName": "Crews",
       "active": true,
-      "specialization": "Futbol"
+      "specialization": 2
     },
     {
-      "id": 3,
       "firstName": "Bruce",
       "lastName": "Wayne",
       "active": true,
-      "specialization": "Martial Arts"
+      "specialization": 3
     },
     {
-      "id": 4,
       "firstName": "Bruce",
       "lastName": "Wayne",
       "active": false,
-      "specialization": "Martial Arts"
-    }
-  ],
-  "Training": [
-    {
-      "id": 1,
-      "traineeID": 1,
-      "trainerID": 1,
-      "trainingName": "Agility 101",
-      "trainingType": {
-        "name": "Agility"
-      },
-      "trainingDate": "2025-03-01",
-      "trainingDuration": 10
-    },
-    {
-      "id": 2,
-      "traineeID": 2,
-      "trainerID": 2,
-      "trainingName": "Basics of Self Defense",
-      "trainingType": {
-        "name": "Self Defense"
-      },
-      "trainingDate": "2025-02-28",
-      "trainingDuration": 15
-    },
-    {
-      "id": 3,
-      "traineeID": 3,
-      "trainerID": 3,
-      "trainingName": "Strength Training Advanced",
-      "trainingType": {
-        "name": "Strength Training"
-      },
-      "trainingDate": "2025-03-01",
-      "trainingDuration": 60
-    },
-    {
-      "id": 4,
-      "traineeID": 4,
-      "trainerID": 4,
-      "trainingName": "Split Practice",
-      "trainingType": {
-        "name": "Flexibility Training"
-      },
-      "trainingDate": "2025-03-29",
-      "trainingDuration": 60
+      "specialization": 4
     }
   ]
 }

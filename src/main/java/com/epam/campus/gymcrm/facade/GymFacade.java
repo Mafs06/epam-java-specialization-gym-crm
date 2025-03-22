@@ -15,8 +15,6 @@ import com.epam.campus.gymcrm.services.impl.TraineeService;
 import com.epam.campus.gymcrm.services.impl.TrainerService;
 import com.epam.campus.gymcrm.services.impl.TrainingService;
 import com.epam.campus.gymcrm.services.impl.TrainingTypeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GymFacade {
 

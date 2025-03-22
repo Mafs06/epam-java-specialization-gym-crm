@@ -30,4 +30,26 @@ public class TrainingTypeRepository {
         return result;
     }
 
+    public void save(TrainingType trainingType) {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            em.persist(trainingType);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            e.printStackTrace();
+
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
 }

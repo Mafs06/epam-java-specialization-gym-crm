@@ -11,6 +11,9 @@ public class TraineeDto {
     private LocalDate dateOfBirth;
     private String address;
 
+    public TraineeDto() {
+    }
+
     public TraineeDto(String firstName, String lastName, boolean active, LocalDate dateOfBirth, String address) {
         this.firstName = firstName;
         this.lastName = lastName;

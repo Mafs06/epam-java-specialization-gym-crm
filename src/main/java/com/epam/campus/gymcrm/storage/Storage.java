@@ -1,5 +1,16 @@
 package com.epam.campus.gymcrm.storage;
 
+import com.epam.campus.gymcrm.models.dtos.TraineeDto;
+import com.epam.campus.gymcrm.models.dtos.TrainerDto;
+import com.epam.campus.gymcrm.models.dtos.TrainingDto;
+import com.epam.campus.gymcrm.models.dtos.TrainingTypeDto;
+import com.epam.campus.gymcrm.models.entities.Trainer;
+import com.epam.campus.gymcrm.models.entities.TrainingType;
+import com.epam.campus.gymcrm.models.entities.User;
+import com.epam.campus.gymcrm.services.impl.TraineeService;
+import com.epam.campus.gymcrm.services.impl.TrainerService;
+import com.epam.campus.gymcrm.services.impl.TrainingService;
+import com.epam.campus.gymcrm.services.impl.TrainingTypeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,8 +22,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.NoSuchElementException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
@@ -23,13 +35,26 @@ public class Storage {
 
     private static final Logger logger = LoggerFactory.getLogger(Storage.class);
 
-    private final String modelsPackagePath = "com.epam.campus.gymcrm.models.entities";
-    private final Map<String, List<Object>> storage = new HashMap<>();
+    private final String modelsPackagePath = "com.epam.campus.gymcrm.models.dtos";
 
     @Value("${storage.filepath}")
     private String filePath;
 
-    //@PostConstruct
+    private final TrainingTypeService trainingTypeService;
+    private final TrainerService trainerService;
+    private final TraineeService traineeService;
+    private final TrainingService trainingService;
+    
+
+        @Autowired
+    public Storage(TrainingTypeService trainingTypeService, TrainerService trainerService, TraineeService traineeService, TrainingService trainingService) {
+        this.trainingTypeService = trainingTypeService;
+        this.trainerService = trainerService;
+        this.traineeService = traineeService;
+        this.trainingService = trainingService;
+    }
+
+    @PostConstruct
     public void initializeStorage() {
         logger.info("Initializing storage from file: {}", filePath);
         
@@ -48,12 +73,11 @@ public class Storage {
             rootNode.fieldNames().forEachRemaining(entityName -> {
                 JsonNode entityEntries = rootNode.get(entityName);
                 if (entityEntries.isArray()) {
-                    List<Object> entriesList = new ArrayList<>();
                     for (JsonNode entry : entityEntries) {
                         try {
-                            Class<?> c = Class.forName(modelsPackagePath + "." + entityName);
+                            Class<?> c = Class.forName(modelsPackagePath + "." + entityName + "Dto");
                             Object o = objectMapper.treeToValue(entry, c);
-                            entriesList.add(o);
+                            saveEntity(o);
                         } catch (ClassNotFoundException e) {
                             logger.error("Entity model not found: {}", entityName, e);
                             break;
@@ -63,10 +87,6 @@ public class Storage {
                             logger.error("Invalid entity to map to: {}", entityName, e);
                         }
                     }
-                    if (!entriesList.isEmpty()) {
-                        storage.put(entityName, entriesList);
-                        logger.info("Loaded {} entries for entity: {}", entriesList.size(), entityName);
-                    }
                 }
             });
         } catch (IOException e) {
@@ -74,13 +94,49 @@ public class Storage {
         }
     }
 
-    public Map<String, List<Object>> getStorage() {
-        logger.debug("Fetching storage data");
-        return storage;
+    private void saveEntity(Object entity) {
+        try {
+            if (entity instanceof TrainerDto trainerDto) {
+                trainerService.createTrainer(trainerDto);
+            } else if (entity instanceof TraineeDto traineeDto) {
+                //traineeService.createTrainee(traineeDto);
+            } else if (entity instanceof TrainingTypeDto trainingTypeDto) {
+                trainingTypeService.createTrainingType(trainingTypeDto);
+            } else if (entity instanceof TrainingDto trainingDto) {
+                //trainingService.createTraining(trainingDto);
+            } else {
+                System.out.println("Some init data could not be saved");
+                logger.warn("Unknown entity type: {}", entity.getClass().getSimpleName());
+            }
+        } catch (Exception e) {
+            logger.error("Error saving entity {}: {}", entity.getClass().getSimpleName(), e.getMessage(), e);
+            System.out.println("Error saving init data");
+        }
     }
 
-    public void addData(String key, Object value) {
-        storage.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
-        logger.info("Added data to storage: key={}", key);
+    private void saveTrainingType(JsonNode entry) {
+        TrainingTypeDto trainingTypeDto = new TrainingTypeDto(
+            entry.get("name").asText()
+        );
+
+        trainingTypeService.createTrainingType(trainingTypeDto);
+    }
+
+    private void saveTrainee(JsonNode entry) {
+
+    }
+
+    private void saveTrainer(JsonNode entry) {
+            String firstName = entry.get("firstName").asText();
+            String lastName = entry.get("lastName").asText();
+            boolean active = entry.get("active").asBoolean();
+            int specializationId = entry.get("specialization").asInt();
+
+            TrainingTypeDto specialization = trainingTypeService.getTrainingType(specializationId);
+
+            TrainerDto trainerdDto = new TrainerDto(firstName, lastName, active, specializationId);
+
+            trainerService.createTrainer(trainerdDto);
+            logger.info("Trainer saved: {} {}", firstName, lastName);
     }
 }

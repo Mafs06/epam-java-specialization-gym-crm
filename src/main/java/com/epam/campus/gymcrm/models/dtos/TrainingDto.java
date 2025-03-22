@@ -15,6 +15,8 @@ public class TrainingDto {
     private LocalDate trainingDate;
     private int trainingDuration;
     
+    public TrainingDto() {}
+
     public TrainingDto(int id, int traineeID, int trainerID, String trainingName,
             LocalDate trainingDate, int trainingDuration) {
         this.id = id;

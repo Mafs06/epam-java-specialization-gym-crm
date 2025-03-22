@@ -1,11 +1,9 @@
 package com.epam.campus.gymcrm;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.postgresql.shaded.com.ongres.saslprep.SASLprep;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -26,26 +24,10 @@ public class App {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
         GymFacade gymFacade = context.getBean(GymFacade.class);
-        /*
-        //! Move to storage init
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("gym_persistence_unit");
-
-        EntityManager em = emf.createEntityManager();
-        // Data initialization for training types
-        TrainingType trainingType;
-        for (int i=0; i<trainingTypes.size(); i++) {
-            em.getTransaction().begin();
-            trainingType = new TrainingType();
-            trainingType.setName(trainingTypes.get(i));
-            em.persist(trainingType);
-            em.getTransaction().commit();
-        }
-        em.close();
-        */
 
         System.out.println("\nWelcome to our Gym CRM!\n");
 
-        try (Scanner sc = new Scanner(System.in)) {
+        /*try (Scanner sc = new Scanner(System.in)) {
 
             while(true) {
                 System.out.println("\nWhat would you like to do? Enter the corresponding option.\n");
@@ -104,7 +86,7 @@ public class App {
                         break;
                 }
             }
-        }
+        }*/
 
         ((AnnotationConfigApplicationContext) context).close();
     }

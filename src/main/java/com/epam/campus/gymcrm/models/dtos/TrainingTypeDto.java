@@ -3,7 +3,9 @@ package com.epam.campus.gymcrm.models.dtos;
 public class TrainingTypeDto {
 
     private String name;
-    
+
+    public TrainingTypeDto() {}
+
     public TrainingTypeDto(String name) {
         this.name = name;
     }

@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerDto;
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
-import com.epam.campus.gymcrm.models.dtos.TrainingTypeDto;
-import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.services.impl.TraineeService;
 import com.epam.campus.gymcrm.services.impl.TrainerService;
 import com.epam.campus.gymcrm.services.impl.TrainingService;
@@ -50,24 +48,50 @@ public class GymFacade {
 
     // Create Trainee profile
     public void createTrainee(String[] params) {
+        if (params.length != 5) {
+            System.err.println("The amount of parameters is not the expected");
+            return;
+        }
+
+        boolean active;
+        if (params[2].equalsIgnoreCase("true") || params[2].equalsIgnoreCase("false")) {
+            active = Boolean.parseBoolean(params[2]);
+        } else {
+            System.err.println("Incorrect active option for trainee");
+            return;
+        }
+
         TraineeDto traineeDto = new TraineeDto(
-            params[0],                          // firstName
-            params[1],                          // lastName
-            Boolean.parseBoolean(params[2]),    // active
-            LocalDate.parse(params[3]),         // dateOfBirth
-            params[4]);                         // adress
-        
+        params[0],                          // firstName
+        params[1],                          // lastName
+        active,                             // active
+        LocalDate.parse(params[3]),         // dateOfBirth
+        params[4]);                         // adress
+    
         traineeService.createTrainee(traineeDto);
     }
 
     // Update Trainee profile
     public void updateTrainee(int id, String[] params) {
+        if (params.length != 5) {
+            System.err.println("The amount of parameters is not the expected");
+            return;
+        }
+
+        boolean active;
+        if (params[2].equalsIgnoreCase("true") || params[2].equalsIgnoreCase("false")) {
+            active = Boolean.parseBoolean(params[2]);
+        } else {
+            System.err.println("Incorrect active option for trainee");
+            return;
+        }
+
         TraineeDto traineeDto = new TraineeDto(
-            params[0],
-            params[1],
-            Boolean.parseBoolean(params[2]),
-            LocalDate.parse(params[3]),
-            params[4]);
+            params[0],                      // firstName
+            params[1],                      // lastName
+            active,                         // active
+            LocalDate.parse(params[3]),     // dateOfBirth
+            params[4]);                     // address
 
         traineeService.updateTrainee(id, traineeDto);
     }
@@ -80,10 +104,29 @@ public class GymFacade {
 
     // Create Trainer profile
     public void createTrainer(String[] params) {
+        if (params.length != 4) {
+            System.err.println("The amount of parameters is not the expected");
+            return;
+        }
+
+        // TODO: match TrainingType id by get, not by hardcoded regex
+        boolean active;
+        if (params[2].equalsIgnoreCase("true") || params[2].equalsIgnoreCase("false")) {
+            active = Boolean.parseBoolean(params[2]);
+        } else {
+            System.err.println("Incorrect active option for trainer");
+            return;
+        }
+
+        if (!params[3].matches("[1-5]")) {
+            System.err.println("Incorrect training type id for trainer");
+            return;
+        }
+
         TrainerDto trainerDto = new TrainerDto(
             params[0],                          // firstName
             params[1],                          // lastName
-            Boolean.parseBoolean(params[2]),    // active
+            active,                            // active
             Integer.parseInt(params[3]));       //trainingType
 
         trainerService.createTrainer(trainerDto);
@@ -93,10 +136,28 @@ public class GymFacade {
 
     // Update Trainer profile
     public void updateTrainer(int id, String[] params) {
+        if (params.length != 4) {
+            System.err.println("The amount of parameters is not the expected");
+            return;
+        }
+
+        boolean active;
+        if (params[2].equalsIgnoreCase("true") || params[2].equalsIgnoreCase("false")) {
+            active = Boolean.parseBoolean(params[2]);
+        } else {
+            System.err.println("Incorrect active option for trainer");
+            return;
+        }
+
+        if (params[3].matches("[1-5]")) {
+            System.err.println("Incorrect training type id for trainer");
+            return;
+        }
+
         TrainerDto trainerDto = new TrainerDto(
             params[0],                          // firstName
             params[1],                          // lastName
-            Boolean.parseBoolean(params[2]),    // active
+            active,                             // active
             Integer.parseInt(params[3]));       //trainingType
         trainerService.updateTrainer(id, trainerDto);
     }

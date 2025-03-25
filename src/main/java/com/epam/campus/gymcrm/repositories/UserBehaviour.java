@@ -9,5 +9,7 @@ public interface UserBehaviour {
     
     Optional<Object> getByUsername(String username);
 
-    void updatePassword(int userId, String newPassword);
+    void updatePassword(String username, String newPassword);
+
+    void switchActiveStatus(String username);
 }

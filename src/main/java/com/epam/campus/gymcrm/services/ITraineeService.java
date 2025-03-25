@@ -15,4 +15,12 @@ public interface ITraineeService {
     void updateTrainee(int id, TraineeDto traineeDtos);
 
     void deleteTrainee(int id);
+
+    boolean traineeLogin(String username, String password);
+
+    TraineeDto getTraineeByUsername(String username);
+
+    void updateTraineePassword(String username, String newPassword);
+
+    void switchTrainerActiveStatus(String username);
 }

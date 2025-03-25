@@ -22,20 +22,12 @@ public class GymFacade {
         this.trainingService = trainingService;
     }
 
-    //* Trainee/Trainer operations
-
-    // TODO: Get Trainee/Trainer profile by username
-
-    // TODO: Trainee/Trainer username and password matching
-    public boolean traineeLogin(String username, String password) {
-        return false;
-    }
-
-    // TODO: Trainee/Trainer password change
-
-    // TODO: Activate/De-activate Trainee/Trainer
-
     //* Trainee operations
+
+    // Login as Trainee
+    public boolean traineeLogin(String username, String password) {
+        return traineeService.traineeLogin(username, password);
+    }
 
     // Create Trainee profile
     public void createTrainee(String[] params) {
@@ -62,6 +54,17 @@ public class GymFacade {
         traineeService.createTrainee(traineeDto);
     }
 
+    // Get Trainee profile by username
+    public void getTraineeByUsername(String username) {
+        try {
+            TraineeDto traineeDto = traineeService.getTraineeByUsername(username);
+            System.out.println(traineeDto.toString());
+        } catch (NoSuchElementException e) {
+            System.err.println("Entered username does not exist");
+        }
+        
+    }
+
     // Update Trainee profile
     public void updateTrainee(int id, String[] params) {
         if (params.length != 5) {
@@ -85,6 +88,16 @@ public class GymFacade {
             params[4]);                     // address
 
         traineeService.updateTrainee(id, traineeDto);
+    }
+
+    // Change Trainer Password
+    public void updateTraineePassword(String username, String newPassword) {
+        traineeService.updateTraineePassword(username, newPassword);
+    }
+
+    // Activate/De-activate Trainee
+    public void switchTraineeActiveStatus(String username) {
+        traineeService.switchTraineeActiveStatus(username);
     }
 
     // TODO: Update Trainee's trainers list
@@ -142,7 +155,7 @@ public class GymFacade {
     // TODO: Get Trainers list not assigned on trainee, by trainee's username
 
     // Update Trainer profile
-    public void updateTrainer(int id, String[] params) {
+    public void updateTrainer(String username, String[] params) {
         if (params.length != 4) {
             System.err.println("The amount of parameters is not the expected");
             return;
@@ -156,7 +169,7 @@ public class GymFacade {
             return;
         }
 
-        if (params[3].matches("[1-5]")) {
+        if (!params[3].matches("[1-5]")) {
             System.err.println("Incorrect training type id for trainer");
             return;
         }
@@ -166,16 +179,17 @@ public class GymFacade {
             params[1],                          // lastName
             active,                             // active
             Integer.parseInt(params[3]));       //trainingType
-        trainerService.updateTrainer(id, trainerDto);
+        trainerService.updateTrainer(username, trainerDto);
     }
 
     // Change Trainer Password
     public void updateTrainerPassword(String username, String newPassword) {
-        try {
-            trainerService.updateTrainerPassword(username, newPassword);
-        } catch (NoSuchElementException e) {
-            System.err.println("Error. Could not change password succesfully");
-        }
+        trainerService.updateTrainerPassword(username, newPassword);
+    }
+
+    // Activate/De-activate Trainer
+    public void switchTrainerActiveStatus(String username) {
+        trainerService.switchTrainerActiveStatus(username);
     }
 
     //* Training operations

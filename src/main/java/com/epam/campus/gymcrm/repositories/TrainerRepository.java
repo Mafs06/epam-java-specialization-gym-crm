@@ -158,18 +158,19 @@ public class TrainerRepository implements BaseRepository<Trainer>, UserBehaviour
     }
 
     @Override
-    public void updatePassword(int trainerID, String newPassword) {
+    public void updatePassword(String username, String newPassword) {
         EntityManager em = JPAUtil.getEntityManager();
+        
         try {
             em.getTransaction().begin();
 
-            Query query = em.createQuery("UPDATE User t SET t.password = :password WHERE t.id = :id");
+            Query query = em.createQuery("UPDATE User u SET u.password = :password WHERE u.username = :username");
             query.setParameter("password", newPassword);
-            query.setParameter("id", trainerID);
+            query.setParameter("username", username);
             int updated = query.executeUpdate();
 
             if (updated == 0) {
-                throw new NoSuchElementException("Trainer with ID " + trainerID + " not found");
+                throw new NoSuchElementException("Trainer with username " + username + " not found");
             }
             em.getTransaction().commit();
         } catch (NoSuchElementException e) {
@@ -180,6 +181,40 @@ public class TrainerRepository implements BaseRepository<Trainer>, UserBehaviour
             throw e;
         } finally {
             em.close();
+        }
+    }
+
+    @Override
+    public void switchActiveStatus(String username) {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+
+            boolean isActive = em.createQuery(
+                "SELECT t.user.active FROM Trainer t WHERE t.user.username = :username", Boolean.class)
+                .setParameter("username", username)
+                .getSingleResult();
+
+            isActive=!isActive;
+            
+            Query query = em.createQuery("UPDATE User u SET u.active = :active WHERE u.username = :username");
+            query.setParameter("active", isActive);
+            query.setParameter("username", username);
+            int updated = query.executeUpdate();
+
+            if (updated == 0) {
+                throw new NoSuchElementException();
+            }
+
+            em.getTransaction().commit();
+        } catch (NoSuchElementException | NoResultException e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            throw e;
         }
     }
 

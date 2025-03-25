@@ -16,6 +16,8 @@ public class MainMenu {
     private String line;
     private int option;
     private String[] values;
+    String usernameTyped;
+    String passwordTyped;
 
     private final String ENTER_DATA = "Enter the following data separated by commas and spaces:\n";
     private final String DATA_SEPARATOR = ", ";
@@ -29,6 +31,9 @@ public class MainMenu {
     private final String TRAINER_EXAMPLE = "Carlos, Lopez, true, 1995-05-20, 123 Main Street";
 
     private final String TRAINING_DATA = "id, trainee id, trainer id, training name, trainind date, duration (minutes)";
+
+    private final String ENTER_USER = "Enter the username: ";
+    private final String ENTER_PASSWORD = "Enter the password: ";
     private final List<String> TRAINING_TYPES = new ArrayList<String>(List.of("fitness", "yoga", "zumba", "stretching", "resistance"));
 
     public MainMenu(GymFacade facade) {
@@ -46,12 +51,17 @@ public class MainMenu {
                 System.out.println("2: Create Trainee profile");
                 System.out.println("3: Login as Trainee");
                 System.out.println("4: Login as Trainer");
-                System.out.println("5: Get Trainer info");
+                System.out.println("5: Get Trainer profile info");
+                System.out.println("6: Get Trainee profile info");
+                System.out.println("7: Change Trainee password");
                 System.out.println("8: Change Trainer password");
+                System.out.println("9: Update Trainer profile");
+                System.out.println("10: Update Trainee profile");
+                System.out.println("12: Change active status on a Trainer");
                 System.out.println("0: Close Gym CRM\n");
 
                 line = sc.nextLine();
-                if (line.matches("[0-8]")) {
+                if (line.matches("[0-9]|10|11|12")) {
                     option = Integer.valueOf(line);
                 } else {
                     logger.error("User input \"{}\" does not follow the menu option requirements", line);
@@ -86,36 +96,85 @@ public class MainMenu {
                         values = sc.nextLine().split(DATA_SEPARATOR);
             
                         System.out.println();
-                        //facade.createTrainee(values);
+                        facade.createTrainee(values);
                         break;
 
                     case 3: case 4:
-                        System.out.print("Enter the username: ");
-                        String usernameTyped = sc.nextLine();
-                        System.out.print("Enter the password: ");
-                        String passwordTyped = sc.nextLine();
+                        System.out.print(ENTER_USER);
+                        usernameTyped = sc.nextLine();
+                        System.out.print(ENTER_PASSWORD);
+                        passwordTyped = sc.nextLine();
                         
                         if(option==4){
                             facade.trainerLogin(usernameTyped, passwordTyped);
-                        } /*else {
+                        } else {
                             facade.traineeLogin(usernameTyped, passwordTyped);
-                        }*/
+                        }
                         break;
 
                     case 5:
-                        System.out.print("Enter the username: ");
+                    case 6:
+                        System.out.print(ENTER_USER);
                         usernameTyped = sc.nextLine();
 
-                        facade.getTrainerByUsername(usernameTyped);
+                        if(option==5){
+                            facade.getTrainerByUsername(usernameTyped);
+                        } else {
+                            facade.getTraineeByUsername(usernameTyped);
+                        }
                         break;
 
+                    case 7:
                     case 8:
-                        System.out.print("Enter the username: ");
+                        System.out.print(ENTER_USER);
                         usernameTyped = sc.nextLine();
-                        System.out.print("Enter new password: ");
+                        System.out.print("Enter the new password");
                         passwordTyped = sc.nextLine();
 
-                        facade.updateTrainerPassword(usernameTyped, passwordTyped);
+                        if(option==7){
+                            facade.updateTraineePassword(usernameTyped, passwordTyped);
+                        } else {
+                            facade.updateTrainerPassword(usernameTyped, passwordTyped);
+                        }
+                        break;
+
+                    case 9:
+                        System.out.print(ENTER_USER);
+                        usernameTyped = sc.nextLine();
+
+                        System.out.println(ENTER_DATA + TRAINER_DATA + "\nExample: " + TRAINER_EXAMPLE);
+                        System.out.println("The available specializations are");
+                        // TODO: get TrainingTypes instead of reading hardcoded list
+                        for (int i = 0; i < TRAINING_TYPES.size(); i++) {
+                            System.out.println((i+1) + ": " + TRAINING_TYPES.get(i));
+                        }
+                        System.out.println();
+                        values = sc.nextLine().split(DATA_SEPARATOR);
+
+                        facade.updateTrainer(usernameTyped, values);
+                        break;
+
+                    case 10:
+                        System.out.print(ENTER_USER);
+                        usernameTyped = sc.nextLine();
+
+                        System.out.println(ENTER_DATA + TRAINEE_DATA + "\nExample: " + TRAINEE_EXAMPLE);
+                        
+                        values = sc.nextLine().split(DATA_SEPARATOR);
+
+                        facade.updateTrainer(usernameTyped, values);
+                        break;
+
+                    case 11:
+                    case 12:
+                        System.out.print(ENTER_USER);
+                        usernameTyped = sc.nextLine();
+
+                        if(option==11){
+                            facade.switchTraineeActiveStatus(usernameTyped);
+                        } else {
+                            facade.switchTrainerActiveStatus(usernameTyped);
+                        }
                         break;
 
                     default:

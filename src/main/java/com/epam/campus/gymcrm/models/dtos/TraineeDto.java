@@ -64,7 +64,7 @@ public class TraineeDto {
 
     @Override
     public String toString() {
-        return "[firstName=" + firstName + ", lastName=" + lastName + ", active=" + active
+        return "TraineeDto[firstName=" + firstName + ", lastName=" + lastName + ", active=" + active
             + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
     }
 

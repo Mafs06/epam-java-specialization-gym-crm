@@ -12,13 +12,15 @@ public interface ITrainerService {
 
     void createTrainer(TrainerDto trainerDto);
 
-    void updateTrainer(int id, TrainerDto updatedTrainerDto);
+    void updateTrainer(String username, TrainerDto updatedTrainerDto);
 
-    void deleteTrainer(int id);
+    void deleteTrainer(int username);
 
     boolean trainerLogin(String username, String password);
 
     TrainerDto getTrainerByUsername(String username);
 
     void updateTrainerPassword(String username, String newPassword);
+
+    void switchTrainerActiveStatus(String username);
 }

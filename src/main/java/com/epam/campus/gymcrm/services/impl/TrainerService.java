@@ -3,7 +3,6 @@ package com.epam.campus.gymcrm.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,8 @@ import com.epam.campus.gymcrm.repositories.TrainerRepository;
 import com.epam.campus.gymcrm.repositories.TrainingTypeRepository;
 import com.epam.campus.gymcrm.services.ITrainerService;
 import com.epam.campus.gymcrm.utils.UserUtil;
+
+import jakarta.persistence.NoResultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,7 @@ public class TrainerService implements ITrainerService {
             Trainer trainer = mapper.toTrainer(newTrainerDto, trainingType, username, password);
 
             trainerDao.save(trainer);
-            System.out.println("Trainer created with username: " + trainer.getUser().getUsername());
+            System.out.println("Trainer created with username: " + trainer.getUser().getUsername() + ".");
 
         } catch (IllegalArgumentException e) {
             logger.error("Validation error when adding trainer: {}", e.getMessage());
@@ -94,11 +95,14 @@ public class TrainerService implements ITrainerService {
     }
 
     @Override
-    public void updateTrainer(int id, TrainerDto updatedTrainerDto) {
-        logger.info("Updating trainer with id {}", id);
+    public void updateTrainer(String username, TrainerDto updatedTrainerDto) {
+        logger.info("Updating trainer with username {}", username);
+
+        Trainer existingTrainer;
         try {
-            Trainer existingTrainer = trainerDao.get(id)
-                .orElseThrow(() -> new NoSuchElementException("Trainer with id %s not found".formatted(id)));
+            existingTrainer = trainerDao.getByUsername(username)
+                .map(obj -> (Trainer) obj)
+                .orElseThrow(() -> new NoSuchElementException("Trainer with username %s not found".formatted(username)));
 
             TrainingType trainingType = trainingTypeDao.get(updatedTrainerDto.getSpecialization())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid specialization"));
@@ -107,15 +111,12 @@ public class TrainerService implements ITrainerService {
 
             trainerDao.update(existingTrainer);
     
-            System.out.println("Trainer updated");
             logger.info("Updated trainer: {}", existingTrainer.toString());
+            System.out.println("Trainer updated.");
     
-        } catch (NoSuchElementException e) {
-            logger.error("NoSuchElementException: {}", e.getMessage(), e);
-            System.err.println("There was an error and trainer could not be updated. " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            logger.error("IllegalArgumentException: {}", e.getMessage(), e);
-            System.err.println("There was an error and trainer could not be updated. " + e.getMessage());
+        } catch (NoSuchElementException| IllegalArgumentException e) {
+            logger.error(e.getMessage());
+            System.err.println("There was an error and trainer could not be updated.");
         }
     }
     
@@ -128,11 +129,11 @@ public class TrainerService implements ITrainerService {
             Trainer trainer = trainerDao.get(id)
                 .orElseThrow(() -> new NoSuchElementException("Trainer with id %s not found".formatted(id)));
             trainerDao.delete(trainer);
-            System.out.println("Trainer deleted");
+            System.out.println("Trainer deleted.");
 
         } catch (NoSuchElementException e) {
-            logger.error("NoSuchElementException: {}", e.getMessage(), e);
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
+            System.err.println("There was an error and trainer could not be deleted.");
         }
     }
 
@@ -140,24 +141,27 @@ public class TrainerService implements ITrainerService {
     public boolean trainerLogin(String username, String password) {
         logger.info("Attempting login for username: {}", username);
 
-        Optional<Trainer> optionalTrainer = trainerDao.getByUsername(username).map(obj -> (Trainer) obj);
-
-        if (optionalTrainer.isEmpty()) {
-            logger.error("Login failed: Username {} not found", username);
-            System.err.println("Username and password do not match. Try again");
+        Trainer trainer;
+        try {
+            trainer = trainerDao.getByUsername(username)
+            .map(obj -> (Trainer) obj)
+            .orElseThrow(() -> new NoSuchElementException("Trainer with username %s not found".formatted(username)));
+        } catch (NoSuchElementException e) {
+            logger.error(e.getMessage());
+            System.err.println("Username and password do not match. Try again.");
             return false;
         }
+        
 
-        Trainer trainer = optionalTrainer.get();
         String storedPassword = trainer.getUser().getPassword();
 
         if (storedPassword.equals(password)) {
             logger.info("Login successful for username: {}", username);
-            System.out.println("Welcome " + username);
+            System.out.println("Welcome " + username + ".");
             return true;
         } else {
-            logger.error("Login failed: Incorrect password for username {}", username);
-            System.err.println("Username and password do not match. Try again");
+            logger.error("Incorrect password for username {}", username);
+            System.err.println("Username and password do not match. Try again.");
             return false;
         }
     }
@@ -174,12 +178,26 @@ public class TrainerService implements ITrainerService {
     @Override
     public void updateTrainerPassword(String username, String newPassword) {
         logger.info("Updating password of trainer with username {}", username);
-        Trainer trainer = (Trainer) trainerDao.getByUsername(username)
-            .orElseThrow(() -> new NoSuchElementException("Trainer with username %s not found".formatted(username)));
-        trainerDao.updatePassword(trainer.getId(), newPassword);
+        try {
+            trainerDao.updatePassword(username, newPassword);
+        } catch (NoSuchElementException e) {
+            logger.error(e.getMessage());
+            System.out.println("There was an error and password could not be changed.");
+        }
 
         logger.info("Succesfull password change for username: {}", username);
-        System.out.println("Password changed");
+        System.out.println("Password changed.");
+    }
+
+    @Override
+    public void switchTrainerActiveStatus(String username) {
+        try {
+            trainerDao.switchActiveStatus(username);
+            System.out.println("Active status changed.");
+        } catch (NoSuchElementException | NoResultException e) {
+            logger.error(e.getMessage());
+            System.err.println("There was an error and active status could not be changed.");
+        }
     }
 
 }

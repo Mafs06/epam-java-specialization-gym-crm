@@ -2,7 +2,6 @@ package com.epam.campus.gymcrm.facade;
 
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerDto;
@@ -17,7 +16,6 @@ public class GymFacade {
     private final TraineeService traineeService;
     private final TrainingService trainingService;
 
-    @Autowired
     public GymFacade(TrainerService trainerService, TraineeService traineeService, TrainingService trainingService, TrainingTypeService trainingTypeService) {
         this.trainerService = trainerService;
         this.traineeService = traineeService;

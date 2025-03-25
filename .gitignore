@@ -1,0 +1,11 @@
+.mvn/
+
+# Ignore compiled Java/Maven files
+target/
+
+# Ignore vscode IDE file config
+.vscode/
+
+# Ignore postgres volume data
+postgres_data/
+

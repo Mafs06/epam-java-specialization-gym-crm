@@ -1,9 +1,9 @@
 {
     "Servers": {
       "1": {
-        "Name": "PostgreSQL",
+        "Name": "gymcrm",
         "Group": "Servers",
-        "Host": "postgres",
+        "Host": "host.docker.internal",
         "Port": 5432,
         "MaintenanceDB": "gym",
         "Username": "postgres",
@@ -11,6 +11,56 @@
         "SSLMode": "prefer",
         "Connected": true
       }
+    },
+    "Databases": {
+    "1": {
+      "Name": "GymDB",
+      "Group": "Servers",
+      "Server": 1,
+      "Port": 5432,
+      "MaintenanceDB": "gym",
+      "Username": "postgres",
+      "SSLMode": "prefer",
+      "Passfile": "/var/lib/postgresql/.pgpass",
+      "Tunnel": "",
+      "TunnelPort": "",
+      "TunnelAuthentication": false,
+      "Description": "",
+      "Properties": {
+        "AutovacuumEnabled": true,
+        "Comment": "",
+        "ConnectionLimit": -1,
+        "Tablespace": "pg_default",
+        "IsTemplate": false,
+        "Encoding": "UTF8",
+        "Collation": "en_US.utf8",
+        "ctype": "en_US.utf8",
+        "AllowConnections": true,
+        "StatementTimeout": 0,
+        "IdleInTransactionSessionTimeout": 0,
+        "RowSecurityEnabled": false,
+        "VacuumTable": {
+          "autovacuum_enabled": true,
+          "toast_autovacuum_enabled": true,
+          "vacuum_scale_factor": 0.2,
+          "autovacuum_vacuum_scale_factor": 0.2,
+          "autovacuum_analyze_scale_factor": 0.1,
+          "vacuum_cost_limit": 200,
+          "vacuum_cost_page_hit": 1,
+          "vacuum_cost_page_miss": 10,
+          "vacuum_cost_page_dirty": 20,
+          "vacuum_cost_limit_scale_factor": 0.2,
+          "autovacuum_vacuum_cost_limit": -1,
+          "autovacuum_analyze_threshold": 50,
+          "autovacuum_vacuum_insert_scale_factor": 0.2,
+          "autovacuum_vacuum_insert_min_size": 1024,
+          "autovacuum_freeze_max_age": 200000000,
+          "autovacuum_multixact_freeze_max_age": 400000000,
+          "autovacuum_vacuum_cost_delay": 0,
+          "autovacuum_vacuum_insert_cost_limit": -1
+        }
+      }
     }
+  }
   }
   

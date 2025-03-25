@@ -31,17 +31,9 @@ public class TrainerService implements ITrainerService {
     private TrainerMapper mapper;
 
     @Autowired
-    public void setTrainingTypeDao(TrainingTypeRepository trainingTypeDao) {
-        this.trainingTypeDao = trainingTypeDao;
-    }
-
-    @Autowired
-    public void setTraineeeDao(TrainerRepository trainerDao) {
+    public TrainerService(TrainerRepository trainerDao, TrainingTypeRepository trainingTypeDao, TrainerMapper mapper) {
         this.trainerDao = trainerDao;
-    }
-
-    @Autowired
-    public void setMappper(TrainerMapper mapper) {
+        this.trainingTypeDao = trainingTypeDao;
         this.mapper = mapper;
     }
 
@@ -152,7 +144,7 @@ public class TrainerService implements ITrainerService {
 
         if (optionalTrainer.isEmpty()) {
             logger.error("Login failed: Username {} not found", username);
-            System.err.println("Entered username does not exist");
+            System.err.println("Username and password do not match. Try again");
             return false;
         }
 

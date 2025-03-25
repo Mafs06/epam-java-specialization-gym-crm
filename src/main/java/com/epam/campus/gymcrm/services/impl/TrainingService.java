@@ -25,12 +25,8 @@ public class TrainingService implements ITrainingService{
     private TrainingMapper mapper;
 
     @Autowired
-    public void setTrainingDao(TrainingRepository trainingDao) {
+    public TrainingService(TrainingRepository trainingDao, TrainingMapper mapper) {
         this.trainingDao = trainingDao;
-    }
-
-    @Autowired
-    public void setMappper(TrainingMapper mapper) {
         this.mapper = mapper;
     }
 

@@ -28,15 +28,11 @@ public class TraineeService implements ITraineeService {
 
 
     @Autowired
-    public void setTraineeDao(TraineeRepository traineeDao) {
+    public TraineeService(TraineeRepository traineeDao, TraineeMapper mapper) {
         this.traineeDao = traineeDao;
-    }
-
-    @Autowired
-    public void setMappper(TraineeMapper mapper) {
         this.mapper = mapper;
     }
-
+    
     @Override
     public TraineeDto getTrainee(int id) {
         logger.info("Fetching trainee with id: {}", id);

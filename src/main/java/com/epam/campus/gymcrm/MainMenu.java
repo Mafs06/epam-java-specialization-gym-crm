@@ -13,23 +13,23 @@ public class MainMenu {
     GymFacade facade;
     private static final Logger logger = LoggerFactory.getLogger(MainMenu.class);
     
-    String line;
-    int option;
-    String[] values;
+    private String line;
+    private int option;
+    private String[] values;
 
-    String enterData = "Enter the following data separated by commas and spaces:\n";
-    String dataSeparator = ", ";
+    private final String ENTER_DATA = "Enter the following data separated by commas and spaces:\n";
+    private final String DATA_SEPARATOR = ", ";
 
-    String userData = "first name, last name, true or false values for activation state of the profile";
+    private final String USER_DATA = "first name, last name, true or false values for activation state of the profile";
 
-    String traineeData = userData + ", birth date, address";
-    String traineeExample = "Jane, Doe, true, 1\n";
+    private final String TRAINEE_DATA = USER_DATA + ", birth date, address";
+    private final String TRAINEE_EXAMPLE = "Jane, Doe, true, 1\n";
 
-    String trainerData =  userData + ", specialization id from the list";
-    String trainerExample = "Carlos, Lopez, true, 1995-05-20, 123 Main Street";
+    private final String TRAINER_DATA =  USER_DATA + ", specialization id from the list";
+    private final String TRAINER_EXAMPLE = "Carlos, Lopez, true, 1995-05-20, 123 Main Street";
 
-    String trainingData = "id, trainee id, trainer id, training name, trainind date, duration (minutes)";
-    List<String> trainingTypes = new ArrayList<String>(List.of("fitness", "yoga", "zumba", "stretching", "resistance"));
+    private final String TRAINING_DATA = "id, trainee id, trainer id, training name, trainind date, duration (minutes)";
+    private final List<String> TRAINING_TYPES = new ArrayList<String>(List.of("fitness", "yoga", "zumba", "stretching", "resistance"));
 
     public MainMenu(GymFacade facade) {
         this.facade = facade;
@@ -66,24 +66,24 @@ public class MainMenu {
 
                 switch (option) {
                     case 1:
-                        System.out.println(enterData + trainerData + "\nExample: " + traineeExample);
+                        System.out.println(ENTER_DATA + TRAINER_DATA + "\nExample: " + TRAINEE_EXAMPLE);
                         System.out.println("The available specializations are");
                         // TODO: get TrainingTypes instead of reading hardcoded list
-                        for (int i = 0; i < trainingTypes.size(); i++) {
-                            System.out.println((i+1) + ": " + trainingTypes.get(i));
+                        for (int i = 0; i < TRAINING_TYPES.size(); i++) {
+                            System.out.println((i+1) + ": " + TRAINING_TYPES.get(i));
                         }
                         System.out.println();
 
-                        values = sc.nextLine().split(dataSeparator);
+                        values = sc.nextLine().split(DATA_SEPARATOR);
             
                         System.out.println();
                         facade.createTrainer(values);
                         break;
 
                     case 2:
-                        System.out.println(enterData + traineeData + "\nExample: " + trainerExample + "\n");
+                        System.out.println(ENTER_DATA + TRAINEE_DATA + "\nExample: " + TRAINER_EXAMPLE + "\n");
 
-                        values = sc.nextLine().split(dataSeparator);
+                        values = sc.nextLine().split(DATA_SEPARATOR);
             
                         System.out.println();
                         //facade.createTrainee(values);

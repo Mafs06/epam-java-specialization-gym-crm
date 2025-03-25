@@ -3,15 +3,10 @@ package com.epam.campus.gymcrm.repositories;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.epam.campus.gymcrm.models.entities.Trainee;
-import com.epam.campus.gymcrm.models.entities.Trainer;
-import com.epam.campus.gymcrm.models.entities.User;
-import com.epam.campus.gymcrm.storage.Storage;
 import com.epam.campus.gymcrm.utils.JPAUtil;
 
 import jakarta.persistence.EntityManager;

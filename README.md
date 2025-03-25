@@ -137,3 +137,12 @@ public String generatePassword() {
     return this.password;
 }
 ```
+
+mvn clean package
+docker-compose build
+docker-compose up --build
+
+docker attach gym_app
+docker-compose down -v
+
+http://localhost:5050

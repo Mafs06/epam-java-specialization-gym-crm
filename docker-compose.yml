@@ -1,0 +1,68 @@
+services:
+  postgres_db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: gym
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gym"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./servers.json:/var/lib/pgadmin/storage/admin_example.com/servers.json
+    
+    entrypoint: >
+      /bin/sh -c "
+        mkdir -p /var/lib/pgadmin/storage/admin_admin.com &&
+        cp /pgadmin4/servers.json /var/lib/pgadmin/storage/admin_admin.com/servers.json &&
+        chmod 600 /var/lib/pgadmin/storage/admin_admin.com/servers.json &&
+        /entrypoint.sh
+      "
+    depends_on:
+      postgres_db:
+        condition: service_healthy  # ✅ Wait until PostgreSQL is healthy
+    
+  gym_app:
+    build: .
+    container_name: gym_app
+    restart: always
+    stdin_open: true
+    tty: true
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/gym
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - STORAGE_FILEPATH=/app/data.json
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src/main/resources/data.json:/app/data.json
+    depends_on:
+      postgres_db:
+        condition: service_healthy  # ✅ Ensures the DB is fully ready before starting
+      pgadmin:
+        condition: service_started  # Ensures pgAdmin starts before gym_app
+
+volumes:
+  postgres_data:
+  pgadmin_data:

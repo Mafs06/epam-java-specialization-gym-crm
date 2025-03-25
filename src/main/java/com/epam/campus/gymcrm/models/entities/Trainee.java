@@ -35,7 +35,6 @@ public class Trainee {
     public Trainee() {}
 
     public Trainee(TraineeBuilder builder) {
-        this.id = builder.id;
         this.dateOfBirth = builder.dateOfBirth;
         this.address = builder.address;
         this.user = builder.user;
@@ -55,6 +54,14 @@ public class Trainee {
 
     public User getUser() {
         return user;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Override

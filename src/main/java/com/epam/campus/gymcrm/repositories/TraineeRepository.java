@@ -21,21 +21,12 @@ public class TraineeRepository implements BaseRepository<Trainee>, UserBehaviour
     
     @Override
     public Optional<Trainee> get(int id) {
-        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
-            .stream()
-            .filter(obj -> obj instanceof Trainee)
-            .map(obj -> (Trainee) obj)
-            .filter(trainer -> trainer.getId() == id)
-            .findFirst();
+        return Optional.of(new Trainee());
     }
 
     @Override
     public List<Trainee> getAll() {
-        return storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
-            .stream()
-            .filter(obj -> obj instanceof Trainee)
-            .map(obj -> (Trainee) obj)
-            .collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
     @Override
@@ -63,27 +54,12 @@ public class TraineeRepository implements BaseRepository<Trainee>, UserBehaviour
 
     @Override
     public void update(Trainee trainee) {
-        // Find and delete old trainee
-        delete(trainee);
-
-        // Rebuild the trainee with updated values
-        Trainee updatedTrainee = new Trainee.TraineeBuilder()
-            .id(trainee.getId())
-            .firstName(trainee.getFirstName())
-            .lastName(trainee.getLastName())
-            .active(trainee.isActive())
-            .dateOfBirth(trainee.getDateOfBirth())
-            .address(trainee.getAddress())
-            .build();
-
-        // Save the updated trainee
-        save(updatedTrainee);
+        save(trainee);
     }
 
     @Override
     public void delete(Trainee trainee) {
-        storage.getStorage().getOrDefault(ENTITY_KEY, new ArrayList<>())
-            .removeIf(obj -> obj instanceof Trainee && ((Trainee) obj).getId() == trainee.getId());
+        
     }
 
     @Override 

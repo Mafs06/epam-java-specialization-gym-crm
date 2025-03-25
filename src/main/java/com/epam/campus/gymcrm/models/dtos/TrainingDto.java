@@ -7,33 +7,22 @@ import com.epam.campus.gymcrm.models.entities.TrainingType;
 // DTO for the Training entity
 public class TrainingDto {
 
-    private int id;
     private int traineeID;
     private int trainerID;
     private String trainingName;
-    private TrainingType trainingType;
+    private int trainingTypeID;
     private LocalDate trainingDate;
     private int trainingDuration;
     
     public TrainingDto() {}
 
-    public TrainingDto(int id, int traineeID, int trainerID, String trainingName,
-            LocalDate trainingDate, int trainingDuration) {
-        this.id = id;
+    public TrainingDto(int traineeID, int trainerID, String trainingName, int trainingTypeID, LocalDate trainingDate, int trainingDuration) {
         this.traineeID = traineeID;
         this.trainerID = trainerID;
         this.trainingName = trainingName;
-        this.trainingType = new TrainingType(trainingName);
+        this.trainingTypeID = trainingTypeID;
         this.trainingDate = trainingDate;
         this.trainingDuration = trainingDuration;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getTraineeID() {
@@ -60,12 +49,12 @@ public class TrainingDto {
         this.trainingName = trainingName;
     }
 
-    public TrainingType getTrainingType() {
-        return trainingType;
+    public int getTrainingTypeID() {
+        return trainingTypeID;
     }
 
-    public void setTrainingType(TrainingType trainingType) {
-        this.trainingType = trainingType;
+    public void setTrainingType(int trainingTypeID) {
+        this.trainingTypeID = trainingTypeID;
     }
 
     public LocalDate getTrainingDate() {
@@ -86,8 +75,8 @@ public class TrainingDto {
 
     @Override
     public String toString() {
-        return "[id=" + id + ", traineeID=" + traineeID + ", trainerID=" + trainerID + ", trainingName="
-                + trainingName + ", trainingType=" + trainingType + ", trainingDate=" + trainingDate
+        return "[traineeID=" + traineeID + ", trainerID=" + trainerID + ", trainingName=" + trainingName
+                + ", trainingTypeID=" + trainingTypeID + ", trainingDate=" + trainingDate
                 + ", trainingDuration=" + trainingDuration + "]";
     }
 

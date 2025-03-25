@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
 import com.epam.campus.gymcrm.models.entities.Trainee;
-import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.models.entities.User;
 
 @Component
@@ -12,10 +11,9 @@ public class TraineeMapper {
 
     public TraineeDto toDto(Trainee trainee) {
         TraineeDto traineeDto = new TraineeDto(
-            trainee.getId(),
-            trainee.getFirstName(),
-            trainee.getLastName(),
-            trainee.isActive(),
+            trainee.getUser().getFirstName(),
+            trainee.getUser().getLastName(),
+            trainee.getUser().isActive(),
             trainee.getDateOfBirth(),
             trainee.getAddress());
 
@@ -37,19 +35,14 @@ public class TraineeMapper {
             .build();
     }
 
-    public Trainee toTrainee(TraineeDto traineeDto, Trainee existingTrainee) {
-        Trainee updatedTrainee = new Trainee.TraineeBuilder()
-            .id(existingTrainee.getId()) // Keep id
-            .firstName(traineeDto.getFirstName())
-            .lastName(traineeDto.getLastName())
-            .username(existingTrainee.getUsername()) // Keep username
-            .password(existingTrainee.getPassword()) // Keep password
-            .active(traineeDto.isActive())
-            .dateOfBirth(traineeDto.getDateOfBirth())
-            .address(traineeDto.getAddress())
-            .build();
-
-        return updatedTrainee;
+    public void toTrainee(TraineeDto traineeDto, Trainee existingTrainee) {
+        User updatedUser = existingTrainee.getUser();
+        updatedUser.setFirstName(traineeDto.getFirstName());
+        updatedUser.setLastName(traineeDto.getLastName());
+        updatedUser.setActive(traineeDto.isActive());
+        
+        existingTrainee.setDateOfBirth(traineeDto.getDateOfBirth());
+        existingTrainee.setAddress(traineeDto.getAddress());
     }
 
 }

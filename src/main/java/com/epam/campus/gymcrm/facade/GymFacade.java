@@ -1,8 +1,6 @@
 package com.epam.campus.gymcrm.facade;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -166,7 +164,7 @@ public class GymFacade {
 
     // Create training
     public void createTraining(String[] params) {
-        TrainingDto trainingDto = new TrainingDto(
+        /*TrainingDto trainingDto = new TrainingDto(
             Integer.parseInt(params[0]),
             Integer.parseInt(params[1]),
             Integer.parseInt(params[2]),
@@ -174,7 +172,7 @@ public class GymFacade {
             LocalDate.parse(params[4]),
             Integer.parseInt(params[5]));
             
-        trainingService.createTraining(trainingDto);
+        trainingService.createTraining(trainingDto)*/;
     }
 
     // TODO: Get Trainee Trainings List by trainee username and criteria

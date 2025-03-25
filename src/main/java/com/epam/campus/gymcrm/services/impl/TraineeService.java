@@ -91,16 +91,13 @@ public class TraineeService implements ITraineeService {
 
     @Override
     public void updateTrainee(int id, TraineeDto updatedTraineeDto) {
-        if (id != updatedTraineeDto.getId()) {
-            throw new IllegalArgumentException("Id to update and id passed do not match");
-        }
 
         Trainee existingTrainee = traineeDao.get(id)
             .orElseThrow(() -> new NoSuchElementException("Trainee with id %s not found".formatted(id)));
 
-        Trainee updatedTrainee = mapper.toTrainee(updatedTraineeDto, existingTrainee);
+        mapper.toTrainee(updatedTraineeDto, existingTrainee);
 
-        traineeDao.update(updatedTrainee);
+        traineeDao.update(existingTrainee);
         logger.info("Trainee updated");
     }
 

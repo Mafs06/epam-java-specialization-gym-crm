@@ -1,4 +1,4 @@
-package com.epam;
+package com.epam.campus.gymcrm;
 
 import java.util.ArrayList;
 import java.util.List;

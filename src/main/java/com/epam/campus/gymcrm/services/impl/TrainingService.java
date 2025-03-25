@@ -59,10 +59,6 @@ public class TrainingService implements ITrainingService{
 
     @Override
     public void updateTraining(int id, TrainingDto updatedTrainingDto) {
-        if (id != updatedTrainingDto.getId()) {
-            throw new IllegalArgumentException("Id to update and id passed do not match");
-        }
-
         Training existingTraining = trainingDao.get(id).orElseThrow(() -> new NoSuchElementException("Training with id %s not found".formatted(id)));
 
         Training updatedTraining = mapper.toTraining(updatedTrainingDto, existingTraining);

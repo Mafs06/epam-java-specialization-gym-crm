@@ -2,7 +2,6 @@ package com.epam.campus.gymcrm.models.entities;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Training {
@@ -44,33 +42,28 @@ public class Training {
     public Training() {}
 
     public Training(TrainingBuilder builder) {
-        this.id = builder.id;
-        this.traineeID = builder.traineeID;
-        this.trainerID = builder.trainerID;
+        this.trainee = builder.trainee;
+        this.trainer = builder.trainer;
         this.name = builder.name;
-        this.trainingTypeID = builder.trainingTypeID;
+        this.trainingType = builder.trainingType;
         this.date = builder.date;
         this.duration = builder.duration;
     }
 
-    public int getId() {
-        return id;
+    public Trainee getTrainee() {
+        return trainee;
     }
 
-    public int getTraineeID() {
-        return traineeID;
-    }
-
-    public int getTrainerID() {
-        return trainerID;
+    public Trainer getTrainer() {
+        return trainer;
     }
 
     public String getName() {
         return name;
     }
 
-    public int gettrainingTypeID() {
-        return trainingTypeID;
+    public TrainingType getTrainingType() {
+        return trainingType;
     }
 
     public LocalDate getDate() {
@@ -83,32 +76,26 @@ public class Training {
 
     @Override
     public String toString() {
-        return "Training [id=" + id + ", traineeID=" + traineeID + ", trainerID=" + trainerID
-                + ", name=" + name + ", trainingTypeID=" + trainingTypeID + ", date=" + date
+        return "Training [id=" + id + ", trainee=" + trainee.toString() + ", trainer=" + trainer.toString()
+                + ", name=" + name + ", trainingType=" + trainingType.toString() + ", date=" + date
                 + ", duration=" + duration + "]";
     }
 
     public static class TrainingBuilder {
-        private int id;
-        private int traineeID;
-        private int trainerID;
+        private Trainee trainee;
+        private Trainer trainer;
         private String name;
-        private int trainingTypeID;
+        private TrainingType trainingType;
         private LocalDate date;
         private int duration;
 
-        public TrainingBuilder id(int id) {
-            this.id = id;
+        public TrainingBuilder trainee(Trainee trainee) {
+            this.trainee = trainee;
             return this;
         }
 
-        public TrainingBuilder traineeID(int traineeID) {
-            this.traineeID = traineeID;
-            return this;
-        }
-
-        public TrainingBuilder trainerID(int trainerID) {
-            this.trainerID = trainerID;
+        public TrainingBuilder trainer(Trainer trainer) {
+            this.trainer = trainer;
             return this;
         }
 
@@ -117,8 +104,8 @@ public class Training {
             return this;
         }
 
-        public TrainingBuilder trainingTypeID(int trainingTypeID) {
-            this.trainingTypeID = trainingTypeID;
+        public TrainingBuilder trainingType(TrainingType trainingType) {
+            this.trainingType = trainingType;
             return this;
         }
 

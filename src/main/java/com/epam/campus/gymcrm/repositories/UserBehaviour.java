@@ -8,4 +8,6 @@ public interface UserBehaviour {
     List<String> getUsernames();
     
     Optional<Object> getByUsername(String username);
+
+    void updatePassword(int userId, String newPassword);
 }

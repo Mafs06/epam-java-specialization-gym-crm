@@ -1,12 +1,11 @@
 package com.epam.campus.gymcrm.facade;
 
 import java.time.LocalDate;
-
+import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerDto;
-import com.epam.campus.gymcrm.models.dtos.TrainingDto;
 import com.epam.campus.gymcrm.services.impl.TraineeService;
 import com.epam.campus.gymcrm.services.impl.TrainerService;
 import com.epam.campus.gymcrm.services.impl.TrainingService;
@@ -32,10 +31,6 @@ public class GymFacade {
     // TODO: Trainee/Trainer username and password matching
     public boolean traineeLogin(String username, String password) {
         return false;
-    }
-
-    public boolean trainerLogin(String username, String password) {
-        return trainerService.trainerLogin(username, password);
     }
 
     // TODO: Trainee/Trainer password change
@@ -100,6 +95,11 @@ public class GymFacade {
 
     //* Trainer operations
 
+    // Login as Trainer
+    public boolean trainerLogin(String username, String password) {
+        return trainerService.trainerLogin(username, password);
+    }
+
     // Create Trainer profile
     public void createTrainer(String[] params) {
         if (params.length != 4) {
@@ -130,6 +130,17 @@ public class GymFacade {
         trainerService.createTrainer(trainerDto);
     }
 
+    // Get Trainer profile by username
+    public void getTrainerByUsername(String username) {
+        try {
+            TrainerDto trainerDto = trainerService.getTrainerByUsername(username);
+            System.out.println(trainerDto.toString());
+        } catch (NoSuchElementException e) {
+            System.err.println("Entered username does not exist");
+        }
+        
+    }
+
     // TODO: Get Trainers list not assigned on trainee, by trainee's username
 
     // Update Trainer profile
@@ -158,6 +169,15 @@ public class GymFacade {
             active,                             // active
             Integer.parseInt(params[3]));       //trainingType
         trainerService.updateTrainer(id, trainerDto);
+    }
+
+    // Change Trainer Password
+    public void updateTrainerPassword(String username, String newPassword) {
+        try {
+            trainerService.updateTrainerPassword(username, newPassword);
+        } catch (NoSuchElementException e) {
+            System.err.println("Error. Could not change password succesfully");
+        }
     }
 
     //* Training operations

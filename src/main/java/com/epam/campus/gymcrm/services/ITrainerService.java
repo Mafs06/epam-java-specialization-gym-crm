@@ -16,4 +16,9 @@ public interface ITrainerService {
 
     void deleteTrainer(int id);
 
+    boolean trainerLogin(String username, String password);
+
+    TrainerDto getTrainerByUsername(String username);
+
+    void updateTrainerPassword(String username, String newPassword);
 }

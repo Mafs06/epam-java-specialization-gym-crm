@@ -15,7 +15,6 @@ public class MainMenu {
     
     String line;
     int option;
-    int id;
     String[] values;
 
     String enterData = "Enter the following data separated by commas and spaces:\n";
@@ -47,10 +46,12 @@ public class MainMenu {
                 System.out.println("2: Create Trainee profile");
                 System.out.println("3: Login as Trainee");
                 System.out.println("4: Login as Trainer");
+                System.out.println("5: Get Trainer info");
+                System.out.println("8: Change Trainer password");
                 System.out.println("0: Close Gym CRM\n");
 
                 line = sc.nextLine();
-                if (line.matches("[0-4]")) {
+                if (line.matches("[0-8]")) {
                     option = Integer.valueOf(line);
                 } else {
                     logger.error("User input \"{}\" does not follow the menu option requirements", line);
@@ -76,7 +77,7 @@ public class MainMenu {
                         values = sc.nextLine().split(dataSeparator);
             
                         System.out.println();
-                        //facade.createTrainer(values);
+                        facade.createTrainer(values);
                         break;
 
                     case 2:
@@ -89,16 +90,33 @@ public class MainMenu {
                         break;
 
                     case 3: case 4:
-                        System.out.print("Enter the user: ");
+                        System.out.print("Enter the username: ");
                         String usernameTyped = sc.nextLine();
                         System.out.print("Enter the password: ");
                         String passwordTyped = sc.nextLine();
                         
-                        /*if(option==3){
-                            facade.traineeLogin(usernameTyped, passwordTyped);
-                        } else {
+                        if(option==4){
                             facade.trainerLogin(usernameTyped, passwordTyped);
+                        } /*else {
+                            facade.traineeLogin(usernameTyped, passwordTyped);
                         }*/
+                        break;
+
+                    case 5:
+                        System.out.print("Enter the username: ");
+                        usernameTyped = sc.nextLine();
+
+                        facade.getTrainerByUsername(usernameTyped);
+                        break;
+
+                    case 8:
+                        System.out.print("Enter the username: ");
+                        usernameTyped = sc.nextLine();
+                        System.out.print("Enter new password: ");
+                        passwordTyped = sc.nextLine();
+
+                        facade.updateTrainerPassword(usernameTyped, passwordTyped);
+                        break;
 
                     default:
                         break;

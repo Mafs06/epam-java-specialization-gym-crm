@@ -50,7 +50,7 @@ public class Storage {
         this.trainingService = trainingService;
     }
 
-    //@PostConstruct
+    @PostConstruct
     public void initializeStorage() {
         logger.info("Initializing storage from file: {}", filePath);
         

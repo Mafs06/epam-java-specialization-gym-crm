@@ -144,13 +144,15 @@ public class TrainerService implements ITrainerService {
         }
     }
 
+    @Override
     public boolean trainerLogin(String username, String password) {
         logger.info("Attempting login for username: {}", username);
 
         Optional<Trainer> optionalTrainer = trainerDao.getByUsername(username).map(obj -> (Trainer) obj);
 
         if (optionalTrainer.isEmpty()) {
-            System.out.println("Login failed: Username {} not found" + username);
+            logger.error("Login failed: Username {} not found", username);
+            System.err.println("Entered username does not exist");
             return false;
         }
 
@@ -158,12 +160,34 @@ public class TrainerService implements ITrainerService {
         String storedPassword = trainer.getUser().getPassword();
 
         if (storedPassword.equals(password)) {
-            System.out.println("Login successful for username: " + username);
+            logger.info("Login successful for username: {}", username);
+            System.out.println("Welcome " + username);
             return true;
         } else {
-            System.out.println("Login failed: Incorrect password for username " + username);
+            logger.error("Login failed: Incorrect password for username {}", username);
+            System.err.println("Username and password do not match. Try again");
             return false;
         }
+    }
+
+    @Override
+    public TrainerDto getTrainerByUsername(String username) {
+        logger.info("Fetching trainer with username: {}", username);
+        Trainer trainer = (Trainer) trainerDao.getByUsername(username)
+            .orElseThrow(() -> new NoSuchElementException("Trainer with username %s not found".formatted(username)));
+
+        return mapper.toDto(trainer);
+    }
+
+    @Override
+    public void updateTrainerPassword(String username, String newPassword) {
+        logger.info("Updating password of trainer with username {}", username);
+        Trainer trainer = (Trainer) trainerDao.getByUsername(username)
+            .orElseThrow(() -> new NoSuchElementException("Trainer with username %s not found".formatted(username)));
+        trainerDao.updatePassword(trainer.getId(), newPassword);
+
+        logger.info("Succesfull password change for username: {}", username);
+        System.out.println("Password changed");
     }
 
 }

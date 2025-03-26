@@ -160,7 +160,7 @@ public class TraineeService implements ITraineeService {
     }
 
     @Override
-    public void switchTrainerActiveStatus(String username) {
+    public void switchTraineeActiveStatus(String username) {
         try {
             traineeDao.switchActiveStatus(username);
             System.out.println("Active status changed.");

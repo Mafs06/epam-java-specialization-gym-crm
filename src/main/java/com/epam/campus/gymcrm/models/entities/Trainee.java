@@ -70,15 +70,9 @@ public class Trainee {
     }
 
     public static class TraineeBuilder {
-        private int id;
         private LocalDate dateOfBirth;
         private String address;
         private User user;
-
-        public TraineeBuilder id(int id) {
-            this.id = id;
-            return this;
-        }
 
         public TraineeBuilder dateOfBirth(LocalDate dateOfBirth) {
             this.dateOfBirth = dateOfBirth;

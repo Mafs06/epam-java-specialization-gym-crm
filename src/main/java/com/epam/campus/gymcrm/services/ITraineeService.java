@@ -22,5 +22,5 @@ public interface ITraineeService {
 
     void updateTraineePassword(String username, String newPassword);
 
-    void switchTrainerActiveStatus(String username);
+    void switchTraineeActiveStatus(String username);
 }

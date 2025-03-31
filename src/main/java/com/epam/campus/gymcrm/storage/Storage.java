@@ -95,7 +95,7 @@ public class Storage {
             if (entity instanceof TrainingTypeDto trainingTypeDto) {
                 trainingTypeService.createTrainingType(trainingTypeDto);
             } else if (entity instanceof TraineeDto traineeDto) {
-                //traineeService.createTrainee(traineeDto);
+                traineeService.createTrainee(traineeDto);
             } else if (entity instanceof TrainerDto trainerDto) {
                 trainerService.createTrainer(trainerDto);
             } else if (entity instanceof TrainingDto trainingDto) {

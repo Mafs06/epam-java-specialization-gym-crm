@@ -57,7 +57,7 @@ public class Trainer {
 
     @Override
     public String toString() {
-        return "Trainer [id=" + id + ", trainingType=" + trainingType + ", user=" + user.toString() + "]";
+        return "Trainer [id=" + id + ", user=" + user.toString() + ", trainingType=" + trainingType + "]";
     }
 
     public static class TrainerBuilder {

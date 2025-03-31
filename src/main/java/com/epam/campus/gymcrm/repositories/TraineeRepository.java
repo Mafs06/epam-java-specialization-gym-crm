@@ -53,12 +53,45 @@ public class TraineeRepository implements BaseRepository<Trainee>, UserBehaviour
 
     @Override
     public void update(Trainee trainee) {
-        save(trainee);
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            em.merge(trainee);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public void delete(Trainee trainee) {
-        
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try { 
+            em.getTransaction().begin();
+
+            trainee = em.contains(trainee) ? trainee : em.merge(trainee);
+            em.remove(trainee);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
     }
 
     @Override 

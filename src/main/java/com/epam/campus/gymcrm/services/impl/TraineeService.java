@@ -88,28 +88,54 @@ public class TraineeService implements ITraineeService {
     }
 
     @Override
-    public void updateTrainee(int id, TraineeDto updatedTraineeDto) {
+    public void updateTrainee(String username, TraineeDto updatedTraineeDto) {
+        logger.info("Updating trainee with username {}", username);
 
-        Trainee existingTrainee = traineeDao.get(id)
-            .orElseThrow(() -> new NoSuchElementException("Trainee with id %s not found".formatted(id)));
+        Trainee existingTrainee;
 
-        mapper.toTrainee(updatedTraineeDto, existingTrainee);
+        try {
+            existingTrainee = traineeDao.getByUsername(username)
+                .map(obj -> (Trainee) obj)
+                .orElseThrow(() -> new NoSuchElementException("Trainee with username %s not found".formatted(username)));
 
-        traineeDao.update(existingTrainee);
-        logger.info("Trainee updated");
+            mapper.toTrainee(updatedTraineeDto, existingTrainee);
+
+            traineeDao.update(existingTrainee);
+    
+            logger.info("Updated trainee: {}", existingTrainee.toString());
+            System.out.println("Trainee updated.");
+    
+        } catch (NoSuchElementException | IllegalArgumentException e) {
+            logger.error(e.getMessage());
+            System.err.println("There was an error and trainee could not be updated.");
+        }
     }
 
     @Override
-    public void deleteTrainee(int id) {
-        Trainee trainee = traineeDao.get(id)
-            .orElseThrow(() -> new NoSuchElementException("Trainee with id %s not found".formatted(id)));
-        traineeDao.delete(trainee);
-        logger.info("Trainee deleted");
+    public void deleteTrainee(String username) {
+        logger.info("Deleting trainee with username {}", username);
+
+        Trainee trainee;
+        
+        try {
+            trainee = traineeDao.getByUsername(username)
+                .map(obj -> (Trainee) obj)
+                .orElseThrow(() -> new NoSuchElementException("Trainee with username %s not found".formatted(username)));
+
+            traineeDao.delete(trainee);
+
+            logger.info("Deleted trainee: {}", trainee.toString());
+            System.out.println("Trainee deleted.");
+
+        } catch (NoSuchElementException | IllegalArgumentException e) {
+            logger.error(e.getMessage());
+            System.err.println("There was an error and trainee could not be deleted.");
+        }
     }
 
     @Override
     public boolean traineeLogin(String username, String password) {
-        logger.info("Attempting login for username: {}", username);
+        logger.info("Attempting login for trainee with username: {}", username);
 
         Trainee trainee;
         try {
@@ -127,7 +153,7 @@ public class TraineeService implements ITraineeService {
 
         if (storedPassword.equals(password)) {
             logger.info("Login successful for username: {}", username);
-            System.out.println("Welcome " + username + ".");
+            System.out.println("Welcome " + username);
             return true;
         } else {
             logger.error("Incorrect password for username {}", username);
@@ -139,6 +165,7 @@ public class TraineeService implements ITraineeService {
     @Override
     public TraineeDto getTraineeByUsername(String username) {
         logger.info("Fetching trainee with username: {}", username);
+
         Trainee trainee = (Trainee) traineeDao.getByUsername(username)
             .orElseThrow(() -> new NoSuchElementException("Trainee with username %s not found".formatted(username)));
 
@@ -148,6 +175,7 @@ public class TraineeService implements ITraineeService {
     @Override
     public void updateTraineePassword(String username, String newPassword) {
         logger.info("Updating password of trainee with username {}", username);
+
         try {
             traineeDao.updatePassword(username, newPassword);
         } catch (NoSuchElementException e) {
@@ -155,12 +183,14 @@ public class TraineeService implements ITraineeService {
             System.out.println("There was an error and password could not be changed.");
         }
 
-        logger.info("Succesfull password change for username: {}", username);
+        logger.info("Succesfull password change for trainee with username: {}", username);
         System.out.println("Password changed.");
     }
 
     @Override
     public void switchTraineeActiveStatus(String username) {
+        logger.info("Updating active status on trainer with username {}", username);
+
         try {
             traineeDao.switchActiveStatus(username);
             System.out.println("Active status changed.");

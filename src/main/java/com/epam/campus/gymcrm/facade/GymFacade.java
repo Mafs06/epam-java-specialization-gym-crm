@@ -1,6 +1,7 @@
 package com.epam.campus.gymcrm.facade;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.NoSuchElementException;
 
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
@@ -9,6 +10,7 @@ import com.epam.campus.gymcrm.services.impl.TraineeService;
 import com.epam.campus.gymcrm.services.impl.TrainerService;
 import com.epam.campus.gymcrm.services.impl.TrainingService;
 import com.epam.campus.gymcrm.services.impl.TrainingTypeService;
+import com.epam.campus.gymcrm.utils.ConsoleUtil;
 
 public class GymFacade {
 
@@ -44,29 +46,33 @@ public class GymFacade {
             return;
         }
 
-        TraineeDto traineeDto = new TraineeDto(
-        params[0],                          // firstName
-        params[1],                          // lastName
-        active,                             // active
-        LocalDate.parse(params[3]),         // dateOfBirth
-        params[4]);                         // adress
-    
-        traineeService.createTrainee(traineeDto);
+        try {
+            TraineeDto traineeDto = new TraineeDto(
+            params[0],                          // firstName
+            params[1],                          // lastName
+            active,                             // active
+            LocalDate.parse(params[3]),         // dateOfBirth
+            params[4]);                         // adress
+
+            traineeService.createTrainee(traineeDto);
+        } catch (DateTimeParseException e) {
+            System.err.println("Invalid date");
+        }
     }
 
     // Get Trainee profile by username
     public void getTraineeByUsername(String username) {
         try {
             TraineeDto traineeDto = traineeService.getTraineeByUsername(username);
-            System.out.println(traineeDto.toString());
+            System.out.println(ConsoleUtil.formatDto(traineeDto.toString()));
         } catch (NoSuchElementException e) {
-            System.err.println("Entered username does not exist");
+            System.err.println("Trainer with that username does not exist");
         }
         
     }
 
     // Update Trainee profile
-    public void updateTrainee(int id, String[] params) {
+    public void updateTrainee(String username, String[] params) {
         if (params.length != 5) {
             System.err.println("The amount of parameters is not the expected");
             return;
@@ -87,7 +93,7 @@ public class GymFacade {
             LocalDate.parse(params[3]),     // dateOfBirth
             params[4]);                     // address
 
-        traineeService.updateTrainee(id, traineeDto);
+        traineeService.updateTrainee(username, traineeDto);
     }
 
     // Change Trainer Password
@@ -102,7 +108,9 @@ public class GymFacade {
 
     // TODO: Update Trainee's trainers list
 
-    // TODO: Delete Trainee profile by username
+    public void deleteTrainee(String username) {
+        traineeService.deleteTrainee(username);
+    }
 
     //* Trainer operations
 
@@ -123,12 +131,12 @@ public class GymFacade {
         if (params[2].equalsIgnoreCase("true") || params[2].equalsIgnoreCase("false")) {
             active = Boolean.parseBoolean(params[2]);
         } else {
-            System.err.println("Incorrect active option for trainer");
+            System.err.println("Incorrect active status");
             return;
         }
 
         if (!params[3].matches("[1-5]")) {
-            System.err.println("Incorrect training type id for trainer");
+            System.err.println("Incorrect specialization");
             return;
         }
 
@@ -145,9 +153,9 @@ public class GymFacade {
     public void getTrainerByUsername(String username) {
         try {
             TrainerDto trainerDto = trainerService.getTrainerByUsername(username);
-            System.out.println(trainerDto.toString());
+            System.out.println(ConsoleUtil.formatDto(trainerDto.toString()));
         } catch (NoSuchElementException e) {
-            System.err.println("Entered username does not exist");
+            System.err.println("Trainer with that username does not exist");
         }
         
     }
@@ -165,12 +173,12 @@ public class GymFacade {
         if (params[2].equalsIgnoreCase("true") || params[2].equalsIgnoreCase("false")) {
             active = Boolean.parseBoolean(params[2]);
         } else {
-            System.err.println("Incorrect active option for trainer");
+            System.err.println("Incorrect active status");
             return;
         }
 
         if (!params[3].matches("[1-5]")) {
-            System.err.println("Incorrect training type id for trainer");
+            System.err.println("Incorrect specialization");
             return;
         }
 

@@ -12,9 +12,9 @@ public interface ITraineeService {
 
     void createTrainee(TraineeDto traineeDto);
 
-    void updateTrainee(int id, TraineeDto traineeDtos);
+    void updateTrainee(String username, TraineeDto traineeDtos);
 
-    void deleteTrainee(int id);
+    void deleteTrainee(String username);
 
     boolean traineeLogin(String username, String password);
 

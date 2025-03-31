@@ -25,10 +25,10 @@ public class MainMenu {
     private final String USER_DATA = "first name, last name, true or false values for activation state of the profile";
 
     private final String TRAINEE_DATA = USER_DATA + ", birth date, address";
-    private final String TRAINEE_EXAMPLE = "Jane, Doe, true, 1\n";
+    private final String TRAINEE_EXAMPLE = "Carlos, Lopez, true, 1995-05-20, 123 Main Street";
 
     private final String TRAINER_DATA =  USER_DATA + ", specialization id from the list";
-    private final String TRAINER_EXAMPLE = "Carlos, Lopez, true, 1995-05-20, 123 Main Street";
+    private final String TRAINER_EXAMPLE = "Jane, Doe, true, 1\n";
 
     private final String TRAINING_DATA = "id, trainee id, trainer id, training name, trainind date, duration (minutes)";
 
@@ -58,10 +58,11 @@ public class MainMenu {
                 System.out.println("9: Update Trainer profile");
                 System.out.println("10: Update Trainee profile");
                 System.out.println("12: Change active status on a Trainer");
+                System.out.println("13: Delete Trainee profile");
                 System.out.println("0: Close Gym CRM\n");
 
                 line = sc.nextLine();
-                if (line.matches("[0-9]|10|11|12")) {
+                if (line.matches("[0-9]|10|11|12|13")) {
                     option = Integer.valueOf(line);
                 } else {
                     logger.error("User input \"{}\" does not follow the menu option requirements", line);
@@ -76,7 +77,7 @@ public class MainMenu {
 
                 switch (option) {
                     case 1:
-                        System.out.println(ENTER_DATA + TRAINER_DATA + "\nExample: " + TRAINEE_EXAMPLE);
+                        System.out.println(ENTER_DATA + TRAINER_DATA + "\nExample: " + TRAINER_EXAMPLE);
                         System.out.println("The available specializations are");
                         // TODO: get TrainingTypes instead of reading hardcoded list
                         for (int i = 0; i < TRAINING_TYPES.size(); i++) {
@@ -91,7 +92,7 @@ public class MainMenu {
                         break;
 
                     case 2:
-                        System.out.println(ENTER_DATA + TRAINEE_DATA + "\nExample: " + TRAINER_EXAMPLE + "\n");
+                        System.out.println(ENTER_DATA + TRAINEE_DATA + "\nExample: " + TRAINEE_EXAMPLE + "\n");
 
                         values = sc.nextLine().split(DATA_SEPARATOR);
             
@@ -128,7 +129,7 @@ public class MainMenu {
                     case 8:
                         System.out.print(ENTER_USER);
                         usernameTyped = sc.nextLine();
-                        System.out.print("Enter the new password");
+                        System.out.print("Enter the new password: ");
                         passwordTyped = sc.nextLine();
 
                         if(option==7){
@@ -158,11 +159,11 @@ public class MainMenu {
                         System.out.print(ENTER_USER);
                         usernameTyped = sc.nextLine();
 
-                        System.out.println(ENTER_DATA + TRAINEE_DATA + "\nExample: " + TRAINEE_EXAMPLE);
+                        System.out.println(ENTER_DATA + TRAINEE_DATA + "\nExample: " + TRAINEE_EXAMPLE + "\n");
                         
                         values = sc.nextLine().split(DATA_SEPARATOR);
 
-                        facade.updateTrainer(usernameTyped, values);
+                        facade.updateTrainee(usernameTyped, values);
                         break;
 
                     case 11:
@@ -176,6 +177,12 @@ public class MainMenu {
                             facade.switchTrainerActiveStatus(usernameTyped);
                         }
                         break;
+                    
+                    case 13:
+                        System.out.print(ENTER_USER);
+                        usernameTyped = sc.nextLine();
+
+                        facade.deleteTrainee(usernameTyped);
 
                     default:
                         break;

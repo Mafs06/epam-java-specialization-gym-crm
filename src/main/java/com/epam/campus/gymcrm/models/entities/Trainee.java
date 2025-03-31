@@ -66,7 +66,7 @@ public class Trainee {
 
     @Override
     public String toString() {
-        return "Trainee [id=" + id + ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", user=" + user.toString() + "]";
+        return "Trainee [id=" + id + ", user=" + user.toString() + "dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
     }
 
     public static class TraineeBuilder {

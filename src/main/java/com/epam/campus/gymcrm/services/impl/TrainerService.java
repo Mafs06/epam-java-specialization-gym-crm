@@ -80,7 +80,7 @@ public class TrainerService implements ITrainerService {
             Trainer trainer = mapper.toTrainer(newTrainerDto, trainingType, username, password);
 
             trainerDao.save(trainer);
-            System.out.println("Trainer created with username: " + trainer.getUser().getUsername() + ".");
+            System.out.println("Trainer created with username: " + trainer.getUser().getUsername());
 
         } catch (IllegalArgumentException e) {
             logger.error("Validation error when adding trainer: {}", e.getMessage());
@@ -119,7 +119,6 @@ public class TrainerService implements ITrainerService {
             System.err.println("There was an error and trainer could not be updated.");
         }
     }
-    
 
     @Override
     public void deleteTrainer(int id) {
@@ -139,7 +138,7 @@ public class TrainerService implements ITrainerService {
 
     @Override
     public boolean trainerLogin(String username, String password) {
-        logger.info("Attempting login for username: {}", username);
+        logger.info("Attempting login for trainer with username: {}", username);
 
         Trainer trainer;
         try {
@@ -169,6 +168,7 @@ public class TrainerService implements ITrainerService {
     @Override
     public TrainerDto getTrainerByUsername(String username) {
         logger.info("Fetching trainer with username: {}", username);
+
         Trainer trainer = (Trainer) trainerDao.getByUsername(username)
             .orElseThrow(() -> new NoSuchElementException("Trainer with username %s not found".formatted(username)));
 
@@ -178,6 +178,7 @@ public class TrainerService implements ITrainerService {
     @Override
     public void updateTrainerPassword(String username, String newPassword) {
         logger.info("Updating password of trainer with username {}", username);
+
         try {
             trainerDao.updatePassword(username, newPassword);
         } catch (NoSuchElementException e) {
@@ -185,12 +186,14 @@ public class TrainerService implements ITrainerService {
             System.out.println("There was an error and password could not be changed.");
         }
 
-        logger.info("Succesfull password change for username: {}", username);
+        logger.info("Succesfull password change for trainer with username: {}", username);
         System.out.println("Password changed.");
     }
 
     @Override
     public void switchTrainerActiveStatus(String username) {
+        logger.info("Updating active status on trainer with username {}", username);
+
         try {
             trainerDao.switchActiveStatus(username);
             System.out.println("Active status changed.");

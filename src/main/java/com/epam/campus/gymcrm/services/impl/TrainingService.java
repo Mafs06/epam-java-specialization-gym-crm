@@ -1,6 +1,6 @@
 package com.epam.campus.gymcrm.services.impl;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -9,8 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.epam.campus.gymcrm.mappers.TrainingMapper;
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
+import com.epam.campus.gymcrm.models.entities.Trainee;
+import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.models.entities.Training;
+import com.epam.campus.gymcrm.models.entities.TrainingType;
+import com.epam.campus.gymcrm.repositories.TraineeRepository;
+import com.epam.campus.gymcrm.repositories.TrainerRepository;
 import com.epam.campus.gymcrm.repositories.TrainingRepository;
+import com.epam.campus.gymcrm.repositories.TrainingTypeRepository;
 import com.epam.campus.gymcrm.services.ITrainingService;
 
 import org.slf4j.Logger;
@@ -21,53 +27,57 @@ public class TrainingService implements ITrainingService{
 
     private static final Logger logger = LoggerFactory.getLogger(TrainingService.class);
 
-    private TrainingRepository trainingDao;
+    private TrainingRepository trainingRepository;
+    private TraineeRepository traineeRepository;
+    private TrainerRepository trainerRepository;
+    private TrainingTypeRepository trainingTypeRepository;
     private TrainingMapper mapper;
 
     @Autowired
-    public TrainingService(TrainingRepository trainingDao, TrainingMapper mapper) {
-        this.trainingDao = trainingDao;
+    public TrainingService(TrainingRepository trainingRepository, TraineeRepository traineeRepository, TrainerRepository trainerRepository, TrainingTypeRepository trainingTypeRepository, TrainingMapper mapper) {
+        this.trainingRepository = trainingRepository;
+        this.traineeRepository = traineeRepository;
+        this.trainerRepository = trainerRepository;
+        this.trainingTypeRepository = trainingTypeRepository;
         this.mapper = mapper;
     }
 
     @Override
-    public TrainingDto getTraining(int id) {
-        logger.info("Fetching training with ID: {}", id);
-        Training training = trainingDao.get(id)
-            .orElseThrow(() -> new NoSuchElementException("Training with id %s not found".formatted(id)));
+    public Training createTraining(TrainingDto newTrainingDto) {
+        logger.info("Adding new training with data: {}", newTrainingDto.toString());
 
-        return mapper.toDto(training);
+        Trainee trainee = (Trainee) traineeRepository.getByUsername(newTrainingDto.getTraineeUsername())
+            .orElseThrow(() -> new NoSuchElementException("Invalid trainee username"));
+        Trainer trainer = (Trainer) trainerRepository.getByUsername(newTrainingDto.getTrainerUsername())
+            .orElseThrow(() -> new NoSuchElementException("Invalid trainer username"));
+        TrainingType trainingType = trainingTypeRepository.getByName(newTrainingDto.getTrainingTypeName())
+            .orElseThrow(() -> new NoSuchElementException("Invalid training type name"));
+        
+        Training training = mapper.toTraining(newTrainingDto, trainee, trainer, trainingType);
+
+        trainingRepository.save(training);
+        logger.info("Training created: {}", training);
+        return training;
     }
 
     @Override
-    public List<TrainingDto> getTrainings() {
-        logger.info("Fetching all trainings");
-        List<TrainingDto> trainingDtos = new ArrayList<>();
-        trainingDao.getAll().forEach(training -> trainingDtos.add(mapper.toDto(training)));
-        return trainingDtos;
+    public List<TrainingDto> getTrainingsByTraineeCriteria(String username,
+                                                            LocalDate fromDate,
+                                                            LocalDate toDate,
+                                                            String trainerUsername,
+                                                            String trainingTypeName)
+    {
+        List<Training> trainings = trainingRepository.findTrainingsByTraineeCriteria(username, fromDate, toDate, trainerUsername, trainingTypeName);
+        return trainings.stream().map(t -> mapper.toDto(t)).toList();
     }
 
     @Override
-    public void createTraining(TrainingDto trainingDto) {
-        trainingDao.save(mapper.toTraining(trainingDto));
-        logger.info("Training created");
-    }
-
-    @Override
-    public void updateTraining(int id, TrainingDto updatedTrainingDto) {
-        Training existingTraining = trainingDao.get(id).orElseThrow(() -> new NoSuchElementException("Training with id %s not found".formatted(id)));
-
-        Training updatedTraining = mapper.toTraining(updatedTrainingDto, existingTraining);
-
-        trainingDao.update(updatedTraining);
-        logger.info("Training updated");
-    }
-
-    @Override
-    public void deleteTraining(int id) {
-        Training training = trainingDao.get(id)
-            .orElseThrow(() -> new NoSuchElementException("Training with id %s not found".formatted(id)));
-        trainingDao.delete(training);
-        logger.info("Training deleted");
+    public List<TrainingDto> getTrainingsByTrainerCriteria(String username,
+                                                            LocalDate fromDate,
+                                                            LocalDate toDate,
+                                                            String traineeUsername)
+    {
+                List<Training> trainings = trainingRepository.findTrainingsByTrainerCriteria(username, fromDate, toDate, traineeUsername);
+                return trainings.stream().map(t -> mapper.toDto(t)).toList();
     }
 }

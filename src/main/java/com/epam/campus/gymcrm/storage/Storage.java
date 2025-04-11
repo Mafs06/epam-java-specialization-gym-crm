@@ -99,7 +99,7 @@ public class Storage {
             } else if (entity instanceof TrainerDto trainerDto) {
                 trainerService.createTrainer(trainerDto);
             } else if (entity instanceof TrainingDto trainingDto) {
-                //trainingService.createTraining(trainingDto);
+                trainingService.createTraining(trainingDto);
             } else {
                 System.out.println("Some init data could not be saved");
                 logger.warn("Unknown entity type: {}", entity.getClass().getSimpleName());

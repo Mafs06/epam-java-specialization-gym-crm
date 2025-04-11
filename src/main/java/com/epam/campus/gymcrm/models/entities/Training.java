@@ -74,11 +74,23 @@ public class Training {
         return duration;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "Training [id=" + id + ", trainee=" + trainee.toString() + ", trainer=" + trainer.toString()
                 + ", name=" + name + ", trainingType=" + trainingType.toString() + ", date=" + date
                 + ", duration=" + duration + "]";
+    }*/
+
+    @Override
+    public String toString() {
+        return "Training [" +
+                "id=" + id +
+                ", date=" + date +
+                ", duration=" + duration +
+                ", trainingType=" + (trainingType != null ? trainingType.getName() : "null") +
+                ", trainer=" + (trainer != null ? trainer.getUser().getUsername() : "null") +
+                ", trainee=" + (trainee != null ? trainee.getUser().getUsername() : "null") +
+                ']';
     }
 
     public static class TrainingBuilder {

@@ -15,7 +15,7 @@ public class TrainerMapper {
             trainer.getUser().getFirstName(),
             trainer.getUser().getLastName(),
             trainer.getUser().isActive(),
-            trainer.getTrainingType().getId());
+            trainer.getTrainingType().getName());
 
         return trainerDto;
     }
@@ -34,7 +34,7 @@ public class TrainerMapper {
             .build();
     }
 
-    public void updateTrainerEntity(TrainerDto trainerDto, Trainer existingTrainer, TrainingType trainingType) {
+    public void updateTrainer(TrainerDto trainerDto, Trainer existingTrainer, TrainingType trainingType) {
         User updatedUser = existingTrainer.getUser();
         updatedUser.setFirstName(trainerDto.getFirstName());
         updatedUser.setLastName(trainerDto.getLastName());

@@ -51,25 +51,59 @@
       "firstName": "Miles",
       "lastName": "Morales",
       "active": true,
-      "specialization": 1
+      "specialization": "fitness"
     },
     {
       "firstName": "Terry",
       "lastName": "Crews",
       "active": true,
-      "specialization": 2
+      "specialization": "yoga"
     },
     {
       "firstName": "Bruce",
       "lastName": "Wayne",
       "active": true,
-      "specialization": 3
+      "specialization": "zumba"
     },
     {
       "firstName": "Bruce",
       "lastName": "Wayne",
       "active": false,
-      "specialization": 4
+      "specialization": "stretching"
+    }
+  ],
+  "Training": [
+    {
+      "traineeUsername": "Pedro.Picapiedra",
+      "trainerUsername": "Miles.Morales",
+      "trainingName": "Agility 101",
+      "trainingTypeName": "fitness",
+      "trainingDate": "2025-03-01",
+      "trainingDuration": 10
+    },
+    {
+      "traineeUsername": "Beatriz.Pinzon",
+      "trainerUsername": "Terry.Crews",
+      "trainingName": "Basics of Self Defense",
+      "trainingTypeName": "yoga",
+      "trainingDate": "2025-02-28",
+      "trainingDuration": 15
+    },
+    {
+      "traineeUsername": "John.Doe",
+      "trainerUsername": "Bruce.Wayne",
+      "trainingName": "Strength Training Advanced",
+      "trainingTypeName": "zumba",
+      "trainingDate": "2025-03-01",
+      "trainingDuration": 60
+    },
+    {
+      "traineeUsername": "John.Doe1",
+      "trainerUsername": "Bruce.Wayne1",
+      "trainingName": "Split Practice",
+      "trainingTypeName": "stretching",
+      "trainingDate": "2025-03-29",
+      "trainingDuration": 60
     }
   ]
 }

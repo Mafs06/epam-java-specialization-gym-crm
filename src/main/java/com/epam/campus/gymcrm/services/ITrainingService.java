@@ -1,19 +1,23 @@
 package com.epam.campus.gymcrm.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
+import com.epam.campus.gymcrm.models.entities.Training;
 
 public interface ITrainingService {
 
-    TrainingDto getTraining(int id);
+    Training createTraining(TrainingDto training);
 
-    List<TrainingDto> getTrainings();
+    List<TrainingDto> getTrainingsByTraineeCriteria(String username,
+                                                    LocalDate fromDate,
+                                                    LocalDate toDate,
+                                                    String trainerUsername,
+                                                    String trainingTypeName);
 
-    void createTraining(TrainingDto training);
-
-    void updateTraining(int id, TrainingDto training);
-
-    void deleteTraining(int id);
-
+    List<TrainingDto>getTrainingsByTrainerCriteria(String username,
+                                                    LocalDate fromDate,
+                                                    LocalDate toDate,
+                                                    String traineeUsername);
 }

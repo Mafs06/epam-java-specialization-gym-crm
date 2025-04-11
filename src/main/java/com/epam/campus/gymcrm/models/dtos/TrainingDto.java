@@ -2,43 +2,41 @@ package com.epam.campus.gymcrm.models.dtos;
 
 import java.time.LocalDate;
 
-import com.epam.campus.gymcrm.models.entities.TrainingType;
-
 // DTO for the Training entity
 public class TrainingDto {
 
-    private int traineeID;
-    private int trainerID;
+    private String traineeUsername;
+    private String trainerUsername;
     private String trainingName;
-    private int trainingTypeID;
+    private String trainingTypeName;
     private LocalDate trainingDate;
     private int trainingDuration;
     
     public TrainingDto() {}
 
-    public TrainingDto(int traineeID, int trainerID, String trainingName, int trainingTypeID, LocalDate trainingDate, int trainingDuration) {
-        this.traineeID = traineeID;
-        this.trainerID = trainerID;
+    public TrainingDto(String traineeUsername, String trainerUsername, String trainingName, String trainingTypeName, LocalDate trainingDate, int trainingDuration) {
+        this.traineeUsername = traineeUsername;
+        this.trainerUsername = trainerUsername;
         this.trainingName = trainingName;
-        this.trainingTypeID = trainingTypeID;
+        this.trainingTypeName = trainingTypeName;
         this.trainingDate = trainingDate;
         this.trainingDuration = trainingDuration;
     }
 
-    public int getTraineeID() {
-        return traineeID;
+    public String getTraineeUsername() {
+        return traineeUsername;
     }
 
-    public void setTraineeID(int traineeID) {
-        this.traineeID = traineeID;
+    public void setTraineeUsername(String traineeUsername) {
+        this.traineeUsername = traineeUsername;
     }
 
-    public int getTrainerID() {
-        return trainerID;
+    public String getTrainerUsername() {
+        return trainerUsername;
     }
 
-    public void setTrainerID(int trainerID) {
-        this.trainerID = trainerID;
+    public void setTrainerUsername(String trainerUsername) {
+        this.trainerUsername = trainerUsername;
     }
 
     public String getTrainingName() {
@@ -49,12 +47,12 @@ public class TrainingDto {
         this.trainingName = trainingName;
     }
 
-    public int getTrainingTypeID() {
-        return trainingTypeID;
+    public String getTrainingTypeName() {
+        return trainingTypeName;
     }
 
-    public void setTrainingType(int trainingTypeID) {
-        this.trainingTypeID = trainingTypeID;
+    public void setTrainingTypeId(String trainingTypeName) {
+        this.trainingTypeName = trainingTypeName;
     }
 
     public LocalDate getTrainingDate() {
@@ -75,9 +73,8 @@ public class TrainingDto {
 
     @Override
     public String toString() {
-        return "[traineeID=" + traineeID + ", trainerID=" + trainerID + ", trainingName=" + trainingName
-                + ", trainingTypeID=" + trainingTypeID + ", trainingDate=" + trainingDate
-                + ", trainingDuration=" + trainingDuration + "]";
+        return "TrainingDto[traineeUsername=" + traineeUsername + ", trainerUsername=" + trainerUsername + ", trainingName=" + trainingName
+                + ", trainingTypeName=" + trainingTypeName + ", trainingDate=" + trainingDate + ", trainingDuration=" + trainingDuration + "]";
     }
 
 }

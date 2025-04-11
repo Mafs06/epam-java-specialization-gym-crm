@@ -1,16 +1,11 @@
 package com.epam.campus.gymcrm.services;
 
-import java.util.List;
-
 import com.epam.campus.gymcrm.models.dtos.TraineeDto;
+import com.epam.campus.gymcrm.models.entities.Trainee;
 
 public interface ITraineeService {
 
-    TraineeDto getTrainee(int id);
-
-    List<TraineeDto> getTrainees();
-
-    void createTrainee(TraineeDto traineeDto);
+    Trainee createTrainee(TraineeDto traineeDto);
 
     void updateTrainee(String username, TraineeDto traineeDtos);
 

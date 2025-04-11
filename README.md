@@ -22,14 +22,14 @@ The project uses **Spring annotations based configuration** for the application 
 
 The application implements DAO objects for each domain model entity, using a shared in-memory storage map. Each entity is stored under a separate namespace:
 
-- **TraineeDao**: Manages CRUD operations for trainees, using the `Trainee` namespace.
-- **TrainerDao**: Handles CRUD operations for trainers. Data is stored under the `Trainer` namespace.
-- **TrainingDao**: Supports CRUD operations for training sessions, organized in the `Training` namespace.
+- **TraineeRepository**: Manages CRUD operations for trainees, using the `Trainee` namespace.
+- **TrainerRepository**: Handles CRUD operations for trainers. Data is stored under the `Trainer` namespace.
+- **TrainingRepository**: Supports CRUD operations for training sessions, organized in the `Training` namespace.
 
-All DAOs implement a common `Dao<T>` interface that defines basic data operations:
+All DAOs implement a common `Repository<T>` interface that defines basic data operations:
 
 ```java
-public interface Dao<T> {
+public interface Repository<T> {
     Optional<T> get(int id);
     List<T> getAll();
     void save(T t);
@@ -63,20 +63,20 @@ The DAOs are auto-wired into their respective service classes using setter-based
 
 ```java
 @Autowired
-public void setTraineeDao(TraineeDao traineeDao) {
-    this.traineeDao = traineeDao;
+public void setTraineeRepository(TraineeRepository traineeRepository) {
+    this.traineeRepository = traineeRepository;
 }
 ```
 
 ### 5. Unit tests
 
-The application is covered by unit tests using JUnit 5 and Mockito to ensure the correctness of the business logic. The three services (TraineeService, TrainerService, TrainingService) have test files that cover CRUD operations while mocking the respective Dao and verifying method calls. 
+The application is covered by unit tests using JUnit 5 and Mockito to ensure the correctness of the business logic. The three services (TraineeService, TrainerService, TrainingService) have test files that cover CRUD operations while mocking the respective Repository and verifying method calls. 
 
 Each service test follows a similar structure. For TraineeService :
 
 ```java
 @Mock
-private TraineeDao traineeDao;
+private TraineeRepository traineeRepository;
 
 @InjectMocks
 private TraineeService traineeService;

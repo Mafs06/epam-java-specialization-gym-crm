@@ -35,7 +35,7 @@ public class TraineeMapper {
             .build();
     }
 
-    public void toTrainee(TraineeDto traineeDto, Trainee existingTrainee) {
+    public void updateTrainee(TraineeDto traineeDto, Trainee existingTrainee) {
         User updatedUser = existingTrainee.getUser();
         updatedUser.setFirstName(traineeDto.getFirstName());
         updatedUser.setLastName(traineeDto.getLastName());

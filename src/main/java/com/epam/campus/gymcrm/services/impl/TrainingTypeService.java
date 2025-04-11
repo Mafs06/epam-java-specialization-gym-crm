@@ -1,6 +1,8 @@
 package com.epam.campus.gymcrm.services.impl;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,29 +20,43 @@ public class TrainingTypeService implements ITrainingTypeService {
 
     private static final Logger logger = LoggerFactory.getLogger(TrainingTypeService.class);
 
-    private TrainingTypeRepository trainingTypeDao;
+    private TrainingTypeRepository trainingTypeRepository;
     private TrainingTypeMapper mapper;
 
     @Autowired
-    public TrainingTypeService(TrainingTypeRepository trainingTypeDao, TrainingTypeMapper mapper) {
-        this.trainingTypeDao = trainingTypeDao;
+    public TrainingTypeService(TrainingTypeRepository trainingTypeRepository, TrainingTypeMapper mapper) {
+        this.trainingTypeRepository = trainingTypeRepository;
         this.mapper = mapper;
     }
 
     @Override
-    public TrainingTypeDto getTrainingType(int id) {
-        logger.info("Fetching training type with ID: {}", id);
-        TrainingType trainingType = trainingTypeDao.get(id)
-            .orElseThrow(() -> new NoSuchElementException("Training type with id %s not found".formatted(id)));
+    public void createTrainingType(TrainingTypeDto newTrainingTypeDto) {
+        logger.info("Adding new training type with data: {}", newTrainingTypeDto);
+
+        TrainingType trainingType = mapper.toTrainingType(newTrainingTypeDto);
+
+        trainingTypeRepository.save(trainingType);
+        logger.info("Training type created: {}", trainingType);
+        System.out.println("Training type created");
+    }
+
+    @Override
+    public TrainingTypeDto getTrainingTypeByName(String name) {
+        logger.info("Fetching training type with name: {}", name);
+
+        TrainingType trainingType = trainingTypeRepository.getByName(name)
+            .orElseThrow(() -> new NoSuchElementException("Training type with name %s not found".formatted(name)));
 
         return mapper.toDto(trainingType);
     }
 
     @Override
-    public void createTrainingType(TrainingTypeDto newTrainingTypeDto) {
-        logger.info("Adding new training type: {}", newTrainingTypeDto.toString());
-        trainingTypeDao.save(mapper.toTrainingType(newTrainingTypeDto));
+    public List<TrainingTypeDto> getTrainingTypes() {
+        logger.info("Fetching all training types");
 
+        List<TrainingType> trainingTypes = trainingTypeRepository.getAll();
+
+        return trainingTypes.stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
 }

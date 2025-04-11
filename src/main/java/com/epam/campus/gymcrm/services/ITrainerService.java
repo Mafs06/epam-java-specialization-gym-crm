@@ -3,18 +3,13 @@ package com.epam.campus.gymcrm.services;
 import java.util.List;
 
 import com.epam.campus.gymcrm.models.dtos.TrainerDto;
+import com.epam.campus.gymcrm.models.entities.Trainer;
 
 public interface ITrainerService {
 
-    TrainerDto getTrainer(int id);
-
-    List<TrainerDto> getTrainers();
-
-    void createTrainer(TrainerDto trainerDto);
+    Trainer createTrainer(TrainerDto trainerDto);
 
     void updateTrainer(String username, TrainerDto updatedTrainerDto);
-
-    void deleteTrainer(int username);
 
     boolean trainerLogin(String username, String password);
 
@@ -23,4 +18,6 @@ public interface ITrainerService {
     void updateTrainerPassword(String username, String newPassword);
 
     void switchTrainerActiveStatus(String username);
+
+    List<TrainerDto> getTrainersNotAssignedToTrainee(String traineeUsername);
 }

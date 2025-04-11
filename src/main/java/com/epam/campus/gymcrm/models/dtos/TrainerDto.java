@@ -6,11 +6,11 @@ public class TrainerDto {
     private String firstName;
     private String lastName;
     private boolean active;
-    private int specialization;
+    private String specialization;
 
     public TrainerDto() {}
 
-    public TrainerDto(String firstName, String lastName, boolean active, int specialization) {
+    public TrainerDto(String firstName, String lastName, boolean active, String specialization) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.active = active;
@@ -41,17 +41,17 @@ public class TrainerDto {
         this.active = active;
     }
 
-    public int getSpecialization() {
+    public String getSpecialization() {
         return specialization;
     }
 
-    public void setSpecialization(int specialization) {
+    public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
 
     @Override
     public String toString() {
-        return "TrainerDto [firstName=" + firstName + ", lastName=" + lastName
+        return "TrainerDto[firstName=" + firstName + ", lastName=" + lastName
                 + ", active=" + active + ", specialization=" + specialization + "]";
     }
 

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +18,13 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
+@Access(AccessType.FIELD)
 @Entity
 public class Trainee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
@@ -51,7 +54,7 @@ public class Trainee {
         this.user = builder.user;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -83,9 +86,13 @@ public class Trainee {
         this.trainers = trainers;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
-        return "Trainee [id=" + id + ", user=" + user.toString() + "dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
+        return "Trainee [id=" + id + ", user=" + user.toString() + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
     }
 
     public static class TraineeBuilder {
@@ -109,7 +116,11 @@ public class Trainee {
         }
 
         public Trainee build() {
-            return new Trainee(this);
+            Trainee trainee = new Trainee(this);
+            if (user != null) {
+                user.setTrainee(trainee);
+            }
+            return trainee;
         }
     }
 

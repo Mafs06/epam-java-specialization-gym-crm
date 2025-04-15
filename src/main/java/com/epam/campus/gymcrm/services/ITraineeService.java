@@ -1,21 +1,34 @@
 package com.epam.campus.gymcrm.services;
 
-import com.epam.campus.gymcrm.models.dtos.TraineeDto;
-import com.epam.campus.gymcrm.models.entities.Trainee;
+import java.util.List;
+
+import com.epam.campus.gymcrm.models.dtos.LoginChangeDto;
+import com.epam.campus.gymcrm.models.dtos.LoginDto;
+import com.epam.campus.gymcrm.models.dtos.TraineeCreationDto;
+import com.epam.campus.gymcrm.models.dtos.TraineeResponseDto;
+import com.epam.campus.gymcrm.models.dtos.TraineeUpdateRequestDto;
+import com.epam.campus.gymcrm.models.dtos.TraineeUpdateResponseDto;
+import com.epam.campus.gymcrm.models.dtos.TrainerFromListDto;
 
 public interface ITraineeService {
 
-    Trainee createTrainee(TraineeDto traineeDto);
+    LoginDto createTrainee(TraineeCreationDto newTraineeDto);
 
-    void updateTrainee(String username, TraineeDto traineeDtos);
+    TraineeUpdateResponseDto updateTrainee(String username, TraineeUpdateRequestDto traineeUpdateDto);
 
     void deleteTrainee(String username);
 
-    boolean traineeLogin(String username, String password);
+    boolean traineeLogin(LoginDto userLoginDto);
 
-    TraineeDto getTraineeByUsername(String username);
+    TraineeResponseDto getTraineeByUsername(String username);
 
-    void updateTraineePassword(String username, String newPassword);
+    boolean updateTraineePassword(String username, LoginChangeDto loginChangeDto);
 
-    void switchTraineeActiveStatus(String username);
+    boolean switchTraineeActiveStatus(String username);
+
+    void updateActiveStatus(String username, boolean active);
+
+    List<TrainerFromListDto> updateTraineeTrainersList(String traineeUsername, List<String> trainerUsernames);
+
+    List<TrainerFromListDto> getActiveTrainersNotAssignedToTrainee(String traineeUsername);
 }

@@ -1,19 +1,22 @@
 package com.epam.campus.gymcrm.models.dtos;
 
-// DTO for the Trainer entity, does not contain ids nor username/password
-public class TrainerDto {
+import jakarta.validation.constraints.NotBlank;
 
+// DTO for the Trainer entity, does not contain ids nor username/password
+public class TrainerCreationDto {
+
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
-    private boolean active;
+    @NotBlank
     private String specialization;
 
-    public TrainerDto() {}
+    public TrainerCreationDto() {}
 
-    public TrainerDto(String firstName, String lastName, boolean active, String specialization) {
+    public TrainerCreationDto(String firstName, String lastName, String specialization) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.active = active;
         this.specialization = specialization;
     }
 
@@ -33,14 +36,6 @@ public class TrainerDto {
         this.lastName = lastName;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public String getSpecialization() {
         return specialization;
     }
@@ -52,7 +47,7 @@ public class TrainerDto {
     @Override
     public String toString() {
         return "TrainerDto[firstName=" + firstName + ", lastName=" + lastName
-                + ", active=" + active + ", specialization=" + specialization + "]";
+                + ", specialization=" + specialization + "]";
     }
 
 }

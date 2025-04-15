@@ -1,7 +1,7 @@
 package com.epam.campus.gymcrm.storage;
 
-import com.epam.campus.gymcrm.models.dtos.TraineeDto;
-import com.epam.campus.gymcrm.models.dtos.TrainerDto;
+import com.epam.campus.gymcrm.models.dtos.TraineeCreationDto;
+import com.epam.campus.gymcrm.models.dtos.TrainerCreationDto;
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
 import com.epam.campus.gymcrm.models.dtos.TrainingTypeDto;
 import com.epam.campus.gymcrm.services.impl.TraineeService;
@@ -71,7 +71,12 @@ public class Storage {
                 if (entityEntries.isArray()) {
                     for (JsonNode entry : entityEntries) {
                         try {
-                            Class<?> c = Class.forName(modelsPackagePath + "." + entityName + "Dto");
+                            Class<?> c;
+                            if (entityName == "Trainee" | entityName == "Trainer") {
+                                c = Class.forName(modelsPackagePath + "." + entityName + "CreationDto");
+                            } else {
+                                c = Class.forName(modelsPackagePath + "." + entityName + "Dto");
+                            }
                             Object o = objectMapper.treeToValue(entry, c);
                             saveEntity(o);
                         } catch (ClassNotFoundException e) {
@@ -94,9 +99,9 @@ public class Storage {
         try {
             if (entity instanceof TrainingTypeDto trainingTypeDto) {
                 trainingTypeService.createTrainingType(trainingTypeDto);
-            } else if (entity instanceof TraineeDto traineeDto) {
+            } else if (entity instanceof TraineeCreationDto traineeDto) {
                 traineeService.createTrainee(traineeDto);
-            } else if (entity instanceof TrainerDto trainerDto) {
+            } else if (entity instanceof TrainerCreationDto trainerDto) {
                 trainerService.createTrainer(trainerDto);
             } else if (entity instanceof TrainingDto trainingDto) {
                 trainingService.createTraining(trainingDto);

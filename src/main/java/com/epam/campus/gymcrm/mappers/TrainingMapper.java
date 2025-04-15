@@ -3,6 +3,7 @@ package com.epam.campus.gymcrm.mappers;
 import org.springframework.stereotype.Component;
 
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
+import com.epam.campus.gymcrm.models.dtos.TrainingFromUserDto;
 import com.epam.campus.gymcrm.models.entities.Trainee;
 import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.models.entities.Training;
@@ -34,5 +35,14 @@ public class TrainingMapper {
             .build();
 
         return training;
+    }
+
+    public TrainingFromUserDto toTrainingFromTraineeDto(Training training) {
+        return new TrainingFromUserDto(
+            training.getName(),
+            training.getDate(), 
+            training.getTrainingType().getName(), 
+            training.getDuration(), 
+            training.getTrainer().getUser().getUsername());
     }
 }

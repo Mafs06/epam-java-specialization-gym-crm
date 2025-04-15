@@ -1,31 +1,29 @@
 package com.epam.campus.gymcrm.models.dtos;
 
 import java.time.LocalDate;
+import java.util.List;
 
-// DTO for the Trainee entity, does not contain ids nor username/password
-public class TraineeDto {
-
+public class TraineeResponseDto {
     private String firstName;
     private String lastName;
-    private boolean active;
     private LocalDate dateOfBirth;
     private String address;
-
-    public TraineeDto() {
-    }
-
-    public TraineeDto(String firstName, String lastName, boolean active, LocalDate dateOfBirth, String address) {
+    private boolean active;
+    private List<TrainerFromListDto> trainers;
+    
+    public TraineeResponseDto(String firstName, String lastName, LocalDate dateOfBirth, String address, boolean active,
+            List<TrainerFromListDto> trainers) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.active = active;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
+        this.active = active;
+        this.trainers = trainers;
     }
 
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -33,23 +31,13 @@ public class TraineeDto {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
-
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -57,15 +45,28 @@ public class TraineeDto {
     public String getAddress() {
         return address;
     }
-
     public void setAddress(String address) {
         this.address = address;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
+    public List<TrainerFromListDto> getTrainers() {
+        return trainers;
+    }
+    public void setTrainers(List<TrainerFromListDto> trainers) {
+        this.trainers = trainers;
+    }
+
     @Override
     public String toString() {
-        return "TraineeDto[firstName=" + firstName + ", lastName=" + lastName + ", active=" + active
-            + ", dateOfBirth=" + dateOfBirth + ", address=" + address + "]";
+        return "TraineeResponseDto [firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth
+                + ", address=" + address + ", active=" + active + ", trainers=" + trainers + "]";
     }
 
 }

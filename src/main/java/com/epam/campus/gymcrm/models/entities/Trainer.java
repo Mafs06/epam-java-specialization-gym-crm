@@ -56,8 +56,20 @@ public class Trainer {
         return user;
     }
 
+    public List<Training> getTrainings() {
+        return trainings;
+    }
+
+    public List<Trainee> getTrainees() {
+        return trainees;
+    }
+
     public void setTrainingType(TrainingType trainingType) {
         this.trainingType = trainingType;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

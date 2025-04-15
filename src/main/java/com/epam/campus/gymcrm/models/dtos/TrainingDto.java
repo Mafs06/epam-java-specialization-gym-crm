@@ -2,14 +2,23 @@ package com.epam.campus.gymcrm.models.dtos;
 
 import java.time.LocalDate;
 
+import io.micrometer.common.lang.NonNull;
+import jakarta.validation.constraints.NotBlank;
+
 // DTO for the Training entity
 public class TrainingDto {
 
+    @NotBlank
     private String traineeUsername;
+    @NotBlank
     private String trainerUsername;
+    @NotBlank
     private String trainingName;
+    @NotBlank
     private String trainingTypeName;
+    @NonNull
     private LocalDate trainingDate;
+    @NonNull
     private int trainingDuration;
     
     public TrainingDto() {}
@@ -51,7 +60,7 @@ public class TrainingDto {
         return trainingTypeName;
     }
 
-    public void setTrainingTypeId(String trainingTypeName) {
+    public void setTrainingTypeName(String trainingTypeName) {
         this.trainingTypeName = trainingTypeName;
     }
 

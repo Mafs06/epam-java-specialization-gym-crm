@@ -15,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -48,11 +48,11 @@ public class User {
         this.active = active;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -94,6 +94,22 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Trainee getTrainee() {
+        return trainee;
+    }
+
+    public void setTrainee(Trainee trainee) {
+        this.trainee = trainee;
+    }
+
+    public Trainer getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
     }
 
     @Override

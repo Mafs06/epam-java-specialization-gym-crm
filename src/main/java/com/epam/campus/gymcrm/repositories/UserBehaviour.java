@@ -11,5 +11,7 @@ public interface UserBehaviour {
 
     void updatePassword(String username, String newPassword);
 
-    void switchActiveStatus(String username);
+    boolean switchActiveStatus(String username);
+
+    void updateActiveStatus(String username, boolean active);
 }

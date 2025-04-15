@@ -20,55 +20,47 @@
     {
       "firstName": "Pedro",
       "lastName": "Picapiedra",
-      "active": true,
       "dateOfBirth": "1000-01-01",
       "address": "Flintstone House"
     },
     {
       "firstName": "Beatriz",
       "lastName": "Pinzon",
-      "active": true,
       "dateOfBirth": "1999-10-25",
       "address": "Carrera 18A #43A 59"
     },
     {
       "firstName": "John",
       "lastName": "Doe",
-      "active": true,
       "dateOfBirth": "2000-05-15",
       "address": "123 Main Street"
     },
     {
       "firstName": "John",
       "lastName": "Doe",
-      "active": false,
-      "dateOfBirth": "2000-05-15",
-      "address": "123 Main Street"
+      "dateOfBirth": "3000-05-15",
+      "address": "321 Boring Street"
     }
   ],
   "Trainer": [
     {
       "firstName": "Miles",
       "lastName": "Morales",
-      "active": true,
       "specialization": "fitness"
     },
     {
       "firstName": "Terry",
       "lastName": "Crews",
-      "active": true,
       "specialization": "yoga"
     },
     {
       "firstName": "Bruce",
       "lastName": "Wayne",
-      "active": true,
       "specialization": "zumba"
     },
     {
       "firstName": "Bruce",
       "lastName": "Wayne",
-      "active": false,
       "specialization": "stretching"
     }
   ],

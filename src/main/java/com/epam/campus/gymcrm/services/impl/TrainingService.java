@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.epam.campus.gymcrm.mappers.TrainingMapper;
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
+import com.epam.campus.gymcrm.models.dtos.TrainingFromUserDto;
 import com.epam.campus.gymcrm.models.entities.Trainee;
 import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.models.entities.Training;
@@ -61,23 +62,23 @@ public class TrainingService implements ITrainingService{
     }
 
     @Override
-    public List<TrainingDto> getTrainingsByTraineeCriteria(String username,
+    public List<TrainingFromUserDto> getTrainingsByTraineeAndCriteria(String username,
                                                             LocalDate fromDate,
                                                             LocalDate toDate,
                                                             String trainerUsername,
                                                             String trainingTypeName)
     {
-        List<Training> trainings = trainingRepository.findTrainingsByTraineeCriteria(username, fromDate, toDate, trainerUsername, trainingTypeName);
-        return trainings.stream().map(t -> mapper.toDto(t)).toList();
+        List<Training> trainings = trainingRepository.findTrainingsByTraineeAndCriteria(username, fromDate, toDate, trainerUsername, trainingTypeName);
+        return trainings.stream().map(t -> mapper.toTrainingFromTraineeDto(t)).toList();
     }
 
     @Override
-    public List<TrainingDto> getTrainingsByTrainerCriteria(String username,
+    public List<TrainingFromUserDto> getTrainingsByTrainerAndCriteria(String username,
                                                             LocalDate fromDate,
                                                             LocalDate toDate,
                                                             String traineeUsername)
     {
-                List<Training> trainings = trainingRepository.findTrainingsByTrainerCriteria(username, fromDate, toDate, traineeUsername);
-                return trainings.stream().map(t -> mapper.toDto(t)).toList();
+                List<Training> trainings = trainingRepository.findTrainingsByTrainerAndCriteria(username, fromDate, toDate, traineeUsername);
+                return trainings.stream().map(t -> mapper.toTrainingFromTraineeDto(t)).toList();
     }
 }

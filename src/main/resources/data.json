@@ -1,0 +1,101 @@
+{
+  "TrainingType":[
+    {
+      "name": "fitness"
+    },
+    {
+      "name": "yoga"
+    },
+    {
+      "name": "zumba"
+    },
+    {
+      "name": "stretching"
+    },
+    {
+      "name": "resistance"
+    }
+  ],
+  "Trainee": [
+    {
+      "firstName": "Pedro",
+      "lastName": "Picapiedra",
+      "dateOfBirth": "1000-01-01",
+      "address": "Flintstone House"
+    },
+    {
+      "firstName": "Beatriz",
+      "lastName": "Pinzon",
+      "dateOfBirth": "1999-10-25",
+      "address": "Carrera 18A #43A 59"
+    },
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "2000-05-15",
+      "address": "123 Main Street"
+    },
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "3000-05-15",
+      "address": "321 Boring Street"
+    }
+  ],
+  "Trainer": [
+    {
+      "firstName": "Miles",
+      "lastName": "Morales",
+      "specialization": "fitness"
+    },
+    {
+      "firstName": "Terry",
+      "lastName": "Crews",
+      "specialization": "yoga"
+    },
+    {
+      "firstName": "Bruce",
+      "lastName": "Wayne",
+      "specialization": "zumba"
+    },
+    {
+      "firstName": "Bruce",
+      "lastName": "Wayne",
+      "specialization": "stretching"
+    }
+  ],
+  "Training": [
+    {
+      "traineeUsername": "Pedro.Picapiedra",
+      "trainerUsername": "Miles.Morales",
+      "trainingName": "Agility 101",
+      "trainingTypeName": "fitness",
+      "trainingDate": "2025-03-01",
+      "trainingDuration": 10
+    },
+    {
+      "traineeUsername": "Beatriz.Pinzon",
+      "trainerUsername": "Terry.Crews",
+      "trainingName": "Basics of Self Defense",
+      "trainingTypeName": "yoga",
+      "trainingDate": "2025-02-28",
+      "trainingDuration": 15
+    },
+    {
+      "traineeUsername": "John.Doe",
+      "trainerUsername": "Bruce.Wayne",
+      "trainingName": "Strength Training Advanced",
+      "trainingTypeName": "zumba",
+      "trainingDate": "2025-03-01",
+      "trainingDuration": 60
+    },
+    {
+      "traineeUsername": "John.Doe1",
+      "trainerUsername": "Bruce.Wayne1",
+      "trainingName": "Split Practice",
+      "trainingTypeName": "stretching",
+      "trainingDate": "2025-03-29",
+      "trainingDuration": 60
+    }
+  ]
+}

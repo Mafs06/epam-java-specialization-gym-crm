@@ -22,6 +22,7 @@ import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.repositories.TraineeRepository;
 import com.epam.campus.gymcrm.repositories.TrainerRepository;
 import com.epam.campus.gymcrm.services.ITraineeService;
+import com.epam.campus.gymcrm.session.SessionManager;
 import com.epam.campus.gymcrm.utils.UserUtil;
 
 @Service
@@ -108,6 +109,10 @@ public class TraineeService implements ITraineeService {
 
         if (storedPassword.equals(loginDto.getPassword())) {
             logger.info("Login successful for username: {}", username);
+            // Set authenticated to true
+            trainee.getUser().setAuthenticated(true);
+            SessionManager.login(trainee.getUser());
+            
             return true;
         } else {
             logger.error("Incorrect password for username {}", username);

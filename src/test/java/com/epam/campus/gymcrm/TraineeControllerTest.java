@@ -1,6 +1,6 @@
 package com.epam.campus.gymcrm;
 
-import com.epam.campus.gymcrm.controllers.TraineeController;
+import com.epam.campus.gymcrm.controllers.impl.TraineeController;
 import com.epam.campus.gymcrm.models.dtos.*;
 import com.epam.campus.gymcrm.services.impl.TraineeService;
 import org.junit.jupiter.api.Test;

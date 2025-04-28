@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.epam.campus.gymcrm.controllers.TrainingTypeController;
+import com.epam.campus.gymcrm.controllers.impl.TrainingTypeController;
 import com.epam.campus.gymcrm.models.dtos.TrainingTypeDto;
 import com.epam.campus.gymcrm.services.impl.TrainingTypeService;
 

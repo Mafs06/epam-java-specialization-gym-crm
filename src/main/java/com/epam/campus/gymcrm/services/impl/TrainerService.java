@@ -18,6 +18,7 @@ import com.epam.campus.gymcrm.repositories.TraineeRepository;
 import com.epam.campus.gymcrm.repositories.TrainerRepository;
 import com.epam.campus.gymcrm.repositories.TrainingTypeRepository;
 import com.epam.campus.gymcrm.services.ITrainerService;
+import com.epam.campus.gymcrm.session.SessionManager;
 import com.epam.campus.gymcrm.utils.UserUtil;
 
 import org.slf4j.Logger;
@@ -100,6 +101,10 @@ public class TrainerService implements ITrainerService {
 
         if (storedPassword.equals(loginDto.getPassword())) {
             logger.info("Login successful for username: {}", username);
+             // Set authenticated to true
+            trainer.getUser().setAuthenticated(true);
+            SessionManager.login(trainer.getUser());
+
             return true;
         } else {
             logger.error("Incorrect password for username {}", username);

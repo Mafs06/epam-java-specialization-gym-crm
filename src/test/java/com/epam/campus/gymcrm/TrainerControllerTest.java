@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import com.epam.campus.gymcrm.controllers.TrainerController;
+import com.epam.campus.gymcrm.controllers.impl.TrainerController;
 import com.epam.campus.gymcrm.models.dtos.LoginChangeDto;
 import com.epam.campus.gymcrm.models.dtos.LoginDto;
 import com.epam.campus.gymcrm.models.dtos.TraineeFromListDto;

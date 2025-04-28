@@ -37,7 +37,6 @@ public class TrainingTypeService implements ITrainingTypeService {
 
         trainingTypeRepository.save(trainingType);
         logger.info("Training type created: {}", trainingType);
-        System.out.println("Training type created");
     }
 
     @Override

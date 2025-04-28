@@ -1,11 +1,8 @@
 package com.epam.campus.gymcrm.services;
 
-import java.util.List;
-
 import com.epam.campus.gymcrm.models.dtos.LoginChangeDto;
 import com.epam.campus.gymcrm.models.dtos.LoginDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerCreationDto;
-import com.epam.campus.gymcrm.models.dtos.TrainerFromListDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerResponseDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerUpdateRequestDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerUpdateResponseDto;

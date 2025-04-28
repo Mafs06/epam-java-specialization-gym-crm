@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.epam.campus.gymcrm.controllers.TrainingController;
+import com.epam.campus.gymcrm.controllers.impl.TrainingController;
 import com.epam.campus.gymcrm.models.dtos.TrainingDto;
 import com.epam.campus.gymcrm.models.dtos.TrainingFromUserDto;
 import com.epam.campus.gymcrm.models.entities.Training;
@@ -117,4 +117,3 @@ public class TrainingControllerTest {
                 .contains(training1, training2);
     }
 }
-

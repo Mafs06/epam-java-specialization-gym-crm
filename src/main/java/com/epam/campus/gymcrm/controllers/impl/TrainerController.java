@@ -1,4 +1,4 @@
-package com.epam.campus.gymcrm.controllers;
+package com.epam.campus.gymcrm.controllers.impl;
 
 import java.util.NoSuchElementException;
 
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.epam.campus.gymcrm.actuator.CustomMetrics;
+import com.epam.campus.gymcrm.controllers.ITrainerController;
 import com.epam.campus.gymcrm.models.dtos.LoginChangeDto;
 import com.epam.campus.gymcrm.models.dtos.LoginDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerCreationDto;
@@ -23,64 +25,50 @@ import com.epam.campus.gymcrm.models.dtos.TrainerResponseDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerUpdateRequestDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerUpdateResponseDto;
 import com.epam.campus.gymcrm.services.impl.TrainerService;
+import com.epam.campus.gymcrm.session.SessionManager;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/gym-crm/trainers")
-public class TrainerController {
+public class TrainerController implements ITrainerController {
     private static final Logger logger = LoggerFactory.getLogger(TrainerController.class);
     private final TrainerService trainerService;
+    private final CustomMetrics customMetrics;
 
     @Autowired
-    public TrainerController(TrainerService trainerService) {
+    public TrainerController(TrainerService trainerService, CustomMetrics customMetrics) {
         this.trainerService = trainerService;
+        this.customMetrics = customMetrics;
     }
 
     // Login as Trainer
-    @Operation(summary = "Login as Trainer", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Login successful",
-            content = @Content(mediaType = "text/plain")),
-        @ApiResponse(responseCode = "401", description = "Invalid credentials",
-            content = @Content(mediaType = "text/plain"))
-    })
+    @Override
     @GetMapping("/login")
     public  ResponseEntity<String> trainerLogin(@Valid @RequestBody LoginDto loginDto) {
         try {
             if (trainerService.trainerLogin(loginDto)) {
+                customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
                 return new ResponseEntity<>("Welcome " + loginDto.getUsername(), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Username and password do not match.", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("Username and password do not match.", HttpStatus.BAD_REQUEST);
             }
         } catch (NoSuchElementException e) {
             logger.error(e.getMessage());
-            return new ResponseEntity<>("Username and password do not match.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Username and password do not match.", HttpStatus.BAD_REQUEST);
         }
     }
 
     // Create Trainer profile
-    @Operation(summary = "Create a new Trainer", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Trainer created",
-            content = @Content(schema = @Schema(implementation = LoginDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input data",
-            content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-            content = @Content)
-    })
+    @Override
     @PostMapping
     public ResponseEntity<LoginDto> createTrainer(@Valid @RequestBody TrainerCreationDto newTrainerDto) {
         try {
             LoginDto loginInfo = trainerService.createTrainer(newTrainerDto);
+            customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
+            customMetrics.addNewUser(); // Increment the new users metric
             return new ResponseEntity<>(loginInfo, HttpStatus.OK);
 
         } catch (NoSuchElementException e) {
@@ -94,16 +82,16 @@ public class TrainerController {
     }
 
     // Get Trainer profile by username
-    @Operation(summary = "Get trainer profile by username", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Trainer profile found",
-            content = @Content(schema = @Schema(implementation = TrainerResponseDto.class))),
-        @ApiResponse(responseCode = "404", description = "Trainer not found", content = @Content)
-    })
+    @Override
     @GetMapping("/{username}")
     public ResponseEntity<TrainerResponseDto> getTrainerByUsername(@PathVariable String username) {
+        if (!SessionManager.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         try {
             TrainerResponseDto responseDto = trainerService.getTrainerByUsername(username);
+            customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             logger.error("Trainer with that username does not exist");
@@ -113,16 +101,16 @@ public class TrainerController {
     }
 
     // Update Trainer profile
-    @Operation(summary = "Update trainer profile", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Trainer updated",
-            content = @Content(schema = @Schema(implementation = TrainerUpdateResponseDto.class))),
-        @ApiResponse(responseCode = "404", description = "Trainer not found", content = @Content)
-    })
+    @Override
     @PutMapping("/{username}")
     public ResponseEntity<TrainerUpdateResponseDto> updateTrainer(@PathVariable String username, @Valid @RequestBody TrainerUpdateRequestDto trainerUpdateDto) {
+        if (!SessionManager.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         try {
             TrainerUpdateResponseDto responseDto = trainerService.updateTrainer(username, trainerUpdateDto);
+            customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             logger.error("Validation failed and trainer could not be updated: {}", e.getMessage());
@@ -132,19 +120,19 @@ public class TrainerController {
     }
 
     // Change Trainer Password
-    @Operation(summary = "Change trainer password", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Password changed", content = @Content(mediaType = "text/plain")),
-        @ApiResponse(responseCode = "401", description = "Unauthorized or invalid password", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Trainer not found", content = @Content)
-    })
+    @Override
     @PutMapping("/{username}/password")
     public ResponseEntity<String> updateTrainerPassword(@PathVariable String username, @RequestBody LoginChangeDto loginChangeDto) {
+        if (!SessionManager.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         try {
             if (trainerService.updateTrainerPassword(username, loginChangeDto)) {
+                customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
                 return new ResponseEntity<>("Password changed.", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("There was an error and password could not be changed.", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("There was an error and password could not be changed.", HttpStatus.BAD_REQUEST);
             }
             
         } catch (NoSuchElementException  | NoResultException e) {
@@ -155,15 +143,16 @@ public class TrainerController {
 
     // Activate/De-activate Trainer
     //! If not idempotent is wanted uncomment this version and comment the following one
-    @Operation(summary = "Switch trainer active status", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Active status changed", content = @Content(mediaType = "text/plain")),
-        @ApiResponse(responseCode = "404", description = "Trainer not found", content = @Content)
-    })
+    @Override
     @PatchMapping("/{username}/active")
     public ResponseEntity<String> switchTrainerActiveStatus(@PathVariable String username) {
+        if (!SessionManager.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         try {
             boolean setTo = trainerService.switchTrainerActiveStatus(username);
+            customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
             return new ResponseEntity<>("Active status changed to " + setTo, HttpStatus.OK);
         } catch (NoSuchElementException | NoResultException e) {
             logger.error("{} {}", e.getClass(), e.getMessage());
@@ -172,11 +161,17 @@ public class TrainerController {
     }
 
     //! If idempotent is wanted uncomment this version and comment the previous one
+    // @Override
     // @PatchMapping("/{username}/active")
     // public ResponseEntity<String> updateTrainerActiveStatus(@PathVariable String username, @RequestBody Map<String, Object> requestBody) {
+    //     if (!SessionManager.isAuthenticated()) {
+    //         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    //     }
+    //
     //     try {
     //         boolean active = Boolean.parseBoolean(requestBody.get("active").toString());
     //         trainerService.updateActiveStatus(username, active);
+    //         customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
     //         return new ResponseEntity<>("Active status updated.", HttpStatus.OK);
     //     } catch (NoSuchElementException | NoResultException e) {
     //         logger.error(e.getMessage());

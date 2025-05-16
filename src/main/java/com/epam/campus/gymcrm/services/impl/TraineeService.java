@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.epam.campus.gymcrm.mappers.TraineeMapper;
@@ -22,7 +23,6 @@ import com.epam.campus.gymcrm.models.entities.Trainer;
 import com.epam.campus.gymcrm.repositories.TraineeRepository;
 import com.epam.campus.gymcrm.repositories.TrainerRepository;
 import com.epam.campus.gymcrm.services.ITraineeService;
-import com.epam.campus.gymcrm.session.SessionManager;
 import com.epam.campus.gymcrm.utils.UserUtil;
 
 @Service
@@ -32,12 +32,14 @@ public class TraineeService implements ITraineeService {
 
     private TraineeRepository traineeRepository;
     private TrainerRepository trainerRepository;
+    private PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public TraineeService(TraineeRepository traineeRepository, TrainerRepository trainerRepository) {
+    public TraineeService(TraineeRepository traineeRepository, TrainerRepository trainerRepository, PasswordEncoder passwordEncoder) {
         this.traineeRepository = traineeRepository;
         this.trainerRepository = trainerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -50,14 +52,15 @@ public class TraineeService implements ITraineeService {
             traineeRepository.getUsernames()
         );
         String password = UserUtil.generatePassword();
+        String hashedPassword = passwordEncoder.encode(password);
 
-        Trainee trainee = TraineeMapper.toTrainee(newTraineeDto, username, password, true);
+        Trainee trainee = TraineeMapper.toTrainee(newTraineeDto, username, hashedPassword, true);
         trainee.getUser().setTrainee(trainee);
 
         traineeRepository.save(trainee);
-        logger.info("Trainee created: {}", trainee);
+        logger.info("Trainee created with username {} and password {}", username, password);
 
-        return new LoginDto(username, password);
+        return new LoginDto(username, hashedPassword);
     }
 
     @Override
@@ -109,9 +112,6 @@ public class TraineeService implements ITraineeService {
 
         if (storedPassword.equals(loginDto.getPassword())) {
             logger.info("Login successful for username: {}", username);
-            // Set authenticated to true
-            trainee.getUser().setAuthenticated(true);
-            SessionManager.login(trainee.getUser());
             
             return true;
         } else {

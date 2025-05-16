@@ -23,15 +23,6 @@ import jakarta.validation.Valid;
 
 public interface ITrainerController {
 
-    @Operation(summary = "Login as Trainer", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Login successful",
-            content = @Content(mediaType = "text/plain")),
-            @ApiResponse(responseCode = "400", description = "Invalid credentials",
-            content = @Content(mediaType = "text/plain"))
-    })
-    ResponseEntity<String> trainerLogin(@Valid @RequestBody LoginDto loginDto);
-
     @Operation(summary = "Create a new Trainer", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Trainer created",

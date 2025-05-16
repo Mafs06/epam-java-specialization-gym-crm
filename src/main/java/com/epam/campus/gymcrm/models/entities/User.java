@@ -38,8 +38,6 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Trainer trainer;
 
-    private transient boolean authenticated = false;
-
     public User() {}
 
     public User(String firstName, String lastName, String username, String password, boolean active) {
@@ -112,14 +110,6 @@ public class User {
 
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
-    }
-
-    public boolean isAuthenticated() {
-        return authenticated;
-    }
-
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated;
     }
 
     @Override

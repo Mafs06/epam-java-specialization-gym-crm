@@ -25,7 +25,6 @@ import com.epam.campus.gymcrm.models.dtos.TrainerResponseDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerUpdateRequestDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerUpdateResponseDto;
 import com.epam.campus.gymcrm.services.impl.TrainerService;
-import com.epam.campus.gymcrm.session.SessionManager;
 
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
@@ -42,23 +41,6 @@ public class TrainerController implements ITrainerController {
     public TrainerController(TrainerService trainerService, CustomMetrics customMetrics) {
         this.trainerService = trainerService;
         this.customMetrics = customMetrics;
-    }
-
-    // Login as Trainer
-    @Override
-    @GetMapping("/login")
-    public  ResponseEntity<String> trainerLogin(@Valid @RequestBody LoginDto loginDto) {
-        try {
-            if (trainerService.trainerLogin(loginDto)) {
-                customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
-                return new ResponseEntity<>("Welcome " + loginDto.getUsername(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Username and password do not match.", HttpStatus.BAD_REQUEST);
-            }
-        } catch (NoSuchElementException e) {
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Username and password do not match.", HttpStatus.BAD_REQUEST);
-        }
     }
 
     // Create Trainer profile
@@ -85,9 +67,7 @@ public class TrainerController implements ITrainerController {
     @Override
     @GetMapping("/{username}")
     public ResponseEntity<TrainerResponseDto> getTrainerByUsername(@PathVariable String username) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             TrainerResponseDto responseDto = trainerService.getTrainerByUsername(username);
@@ -104,9 +84,7 @@ public class TrainerController implements ITrainerController {
     @Override
     @PutMapping("/{username}")
     public ResponseEntity<TrainerUpdateResponseDto> updateTrainer(@PathVariable String username, @Valid @RequestBody TrainerUpdateRequestDto trainerUpdateDto) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             TrainerUpdateResponseDto responseDto = trainerService.updateTrainer(username, trainerUpdateDto);
@@ -123,9 +101,7 @@ public class TrainerController implements ITrainerController {
     @Override
     @PutMapping("/{username}/password")
     public ResponseEntity<String> updateTrainerPassword(@PathVariable String username, @RequestBody LoginChangeDto loginChangeDto) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             if (trainerService.updateTrainerPassword(username, loginChangeDto)) {
@@ -146,9 +122,7 @@ public class TrainerController implements ITrainerController {
     @Override
     @PatchMapping("/{username}/active")
     public ResponseEntity<String> switchTrainerActiveStatus(@PathVariable String username) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             boolean setTo = trainerService.switchTrainerActiveStatus(username);

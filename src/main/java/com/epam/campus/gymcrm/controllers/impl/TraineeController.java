@@ -29,7 +29,6 @@ import com.epam.campus.gymcrm.models.dtos.TraineeUpdateRequestDto;
 import com.epam.campus.gymcrm.models.dtos.TraineeUpdateResponseDto;
 import com.epam.campus.gymcrm.models.dtos.TrainerFromListDto;
 import com.epam.campus.gymcrm.services.impl.TraineeService;
-import com.epam.campus.gymcrm.session.SessionManager;
 
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
@@ -46,24 +45,6 @@ public class TraineeController implements ITraineeController{
     public TraineeController(TraineeService traineeService, CustomMetrics customMetrics) {
         this.traineeService = traineeService;
         this.customMetrics = customMetrics;
-    }
-
-    // Login as Trainee
-    @Override
-    @GetMapping("/login")
-    public ResponseEntity<String> traineeLogin(@Valid @RequestBody LoginDto loginDto) {
-        try {
-            if (traineeService.traineeLogin(loginDto)) {
-                customMetrics.incrementSuccessfulOperation(); // Increment the successful login metric
-                return new ResponseEntity<>("Welcome " + loginDto.getUsername(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Username and password do not match.", HttpStatus.BAD_REQUEST);
-            }
-
-        } catch (NoSuchElementException e) {
-            logger.error(e.getMessage());
-            return new ResponseEntity<>("Username and password do not match. Try again.", HttpStatus.BAD_REQUEST);
-        }
     }
 
     // Create Trainee Profile
@@ -86,9 +67,7 @@ public class TraineeController implements ITraineeController{
     @Override
     @GetMapping("/{username}")
     public ResponseEntity<TraineeResponseDto> getTraineeByUsername(@PathVariable String username) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             TraineeResponseDto responseDto = traineeService.getTraineeByUsername(username);
@@ -104,9 +83,7 @@ public class TraineeController implements ITraineeController{
     @Override
     @PutMapping("/{username}")
     public ResponseEntity<TraineeUpdateResponseDto> updateTrainee(@PathVariable String username, @Valid @RequestBody TraineeUpdateRequestDto traineeUpdateDto) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             TraineeUpdateResponseDto responseDto = traineeService.updateTrainee(username, traineeUpdateDto);
@@ -122,9 +99,7 @@ public class TraineeController implements ITraineeController{
     @Override
     @PutMapping("/{username}/password")
     public ResponseEntity<String> updateTraineePassword(@PathVariable String username, @RequestBody LoginChangeDto loginChangeDto) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             if (traineeService.updateTraineePassword(username, loginChangeDto)) {
@@ -145,9 +120,7 @@ public class TraineeController implements ITraineeController{
     @Override
     @PatchMapping("/{username}/active")
     public ResponseEntity<String> switchTraineeActiveStatus(@PathVariable String username) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             boolean setTo = traineeService.switchTraineeActiveStatus(username);
@@ -182,9 +155,7 @@ public class TraineeController implements ITraineeController{
     @Override
     @PutMapping("/{username}/trainers")
     public ResponseEntity<List<TrainerFromListDto>> updateTraineeTrainers(@PathVariable String username, @RequestBody Map<String, List<String>> body) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             List<String> newTrainers = body.get("newTrainers");
@@ -201,9 +172,7 @@ public class TraineeController implements ITraineeController{
     @Override
     @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteTrainee(@PathVariable String username) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
 
         try {
             traineeService.deleteTrainee(username);
@@ -219,9 +188,7 @@ public class TraineeController implements ITraineeController{
     @Override
     @GetMapping("{traineeUsername}/not-assigned-active-trainers")
     public ResponseEntity<List<TrainerFromListDto>> getTrainersNotAssignedToTrainee(@PathVariable String traineeUsername) {
-        if (!SessionManager.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        
         
         try {
             List<TrainerFromListDto> trainers = traineeService.getActiveTrainersNotAssignedToTrainee(traineeUsername);

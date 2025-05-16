@@ -3,6 +3,7 @@ package com.epam.campus.gymcrm.services.impl;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.epam.campus.gymcrm.mappers.TrainerMapper;
@@ -18,7 +19,6 @@ import com.epam.campus.gymcrm.repositories.TraineeRepository;
 import com.epam.campus.gymcrm.repositories.TrainerRepository;
 import com.epam.campus.gymcrm.repositories.TrainingTypeRepository;
 import com.epam.campus.gymcrm.services.ITrainerService;
-import com.epam.campus.gymcrm.session.SessionManager;
 import com.epam.campus.gymcrm.utils.UserUtil;
 
 import org.slf4j.Logger;
@@ -31,11 +31,13 @@ public class TrainerService implements ITrainerService {
 
     private TrainerRepository trainerRepository;
     private TrainingTypeRepository trainingTypeRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public TrainerService(TrainerRepository trainerRepository, TrainingTypeRepository trainingTypeRepository, TraineeRepository traineeRepository) {
+    public TrainerService(TrainerRepository trainerRepository, TrainingTypeRepository trainingTypeRepository, TraineeRepository traineeRepository, PasswordEncoder passwordEncoder) {
         this.trainerRepository = trainerRepository;
         this.trainingTypeRepository = trainingTypeRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -48,17 +50,18 @@ public class TrainerService implements ITrainerService {
             trainerRepository.getUsernames()
         );
         String password = UserUtil.generatePassword();
+        String hashedPassword = passwordEncoder.encode(password);
 
         TrainingType trainingType = trainingTypeRepository.getByName(newTrainerDto.getSpecialization())
             .orElseThrow(() -> new NoSuchElementException("Specialization with name %s not found".formatted(newTrainerDto.getSpecialization())));
         
-        Trainer trainer = TrainerMapper.toTrainer(newTrainerDto, trainingType, username, password, true);
+        Trainer trainer = TrainerMapper.toTrainer(newTrainerDto, trainingType, username, hashedPassword, true);
         trainer.getUser().setTrainer(trainer);
 
         trainerRepository.save(trainer);
-        logger.info("Trainer created: {}", trainer);
+        logger.info("Trainer created with username {} and password {}", username, password);
 
-        return new LoginDto(username, password);
+        return new LoginDto(username, hashedPassword);
     }
 
     @Override
@@ -101,9 +104,6 @@ public class TrainerService implements ITrainerService {
 
         if (storedPassword.equals(loginDto.getPassword())) {
             logger.info("Login successful for username: {}", username);
-             // Set authenticated to true
-            trainer.getUser().setAuthenticated(true);
-            SessionManager.login(trainer.getUser());
 
             return true;
         } else {

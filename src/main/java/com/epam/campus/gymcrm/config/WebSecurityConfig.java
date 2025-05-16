@@ -41,16 +41,17 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/gym-crm/trainees").permitAll()
                 .requestMatchers(HttpMethod.POST, "/gym-crm/trainers").permitAll()
                 .requestMatchers("/gym-crm/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/gym-crm/actuator/**").permitAll()
                 .requestMatchers(
-            "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/v3/api-docs/**",
-                        "/api-docs/**",
-                        "/swagger-resources/**",
-                        "/webjars/**",
-                        "/favicon.ico"
-                    ).permitAll()
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/v3/api-docs/**",
+                    "/api-docs/**",
+                    "/swagger-resources/**",
+                    "/webjars/**",
+                    "/favicon.ico"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
